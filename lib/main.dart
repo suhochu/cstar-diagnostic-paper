@@ -2,8 +2,10 @@ import 'package:cstarimage_testpage/routes/routes.dart';
 import 'package:cstarimage_testpage/utils/logging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
+  setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ProviderScope(
