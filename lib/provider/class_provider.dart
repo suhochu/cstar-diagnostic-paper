@@ -27,6 +27,7 @@ class ClassNotifier extends StateNotifier<ClassDataModel> {
     final classData = await repository.getRowByDate(date);
     if (classData == null) {
       state = ClassModelError(error: '오늘 날짜의 강의가 없습니다.');
+      return;
     }
     ClassModel classModel = ClassModel.fromMap(classData!);
     classModel = classModel.copyWith(accessibleTests: stringToList(classData['accessibleTests']!));

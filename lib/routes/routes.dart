@@ -1,4 +1,4 @@
-import 'package:cstarimage_testpage/provider/autho_provider.dart';
+import 'package:cstarimage_testpage/provider/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

@@ -44,6 +44,13 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
     });
   }
 
+  int setQuestionQty(List<QuestionModel> questions){
+    print(questions[0]);
+    if(questions[0].answerD == null) { return 3; }
+    if(questions[0].answerE != '') { return 5; }
+    return 4;
+  }
+
   @override
   Widget build(BuildContext context) {
     final questionsData = ref.watch(questionListProvider);
@@ -74,12 +81,12 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
     }
 
     questionsData as QuestionsModel;
-
-    final int listLength = questionsData.questions.length;
-    initAnswerSheet(listLength);
+    final List<QuestionModel> questions = questionsData.questions;
+    initAnswerSheet(questions.length);
+    int questionQty = setQuestionQty(questions);
     return Scaffold(
         body: ListView.builder(
-      itemCount: listLength + 2,
+      itemCount: questions.length + 2,
       itemBuilder: (context, index) {
         if (index == 0) {
           return Column(
@@ -88,7 +95,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.only(top: 30, bottom: 30),
                 child: Text(
-                  widget.title,
+                  '${widget.title} 진단',
                   style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
                 ),
               ),
@@ -106,12 +113,12 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
             ],
           );
         }
-        if (index == listLength + 1) {
+        if (index == questions.length + 1) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
-                context.goNamed(ResultPage.routeName, queryParams: {'totalQty': listLength.toString()});
+                context.goNamed(ResultPage.routeName, queryParams: {'totalQty': questions.length.toString()});
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
               child: const Padding(
@@ -130,7 +137,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
         return QuestionCard(
           questions: questionsData.questions[index - 1],
           index: index,
-          questionQty: widget.questionQty,
+          questionQty: questionQty,
         );
       },
     ));

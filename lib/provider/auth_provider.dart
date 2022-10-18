@@ -38,7 +38,7 @@ class AuthProvider extends ChangeNotifier {
                 GoRoute(
                   path: TestSelectionPage.routeName,
                   name: TestSelectionPage.routeName,
-                  builder: (_, __) => const TestSelectionPage(),
+                  builder: (_, __) => TestSelectionPage(),
                   routes: [
                     GoRoute(
                       path: '${QuestionsSheetPage.routeName}/:rid',

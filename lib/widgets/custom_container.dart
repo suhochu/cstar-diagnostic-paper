@@ -1,10 +1,10 @@
 import 'package:cstarimage_testpage/screen/question_sheet_page.dart';
-import 'package:cstarimage_testpage/utils/questions_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomContainer extends StatelessWidget {
-  const CustomContainer({Key? key, required this.title, required this.number, required this.questionQty}) : super(key: key);
+  const CustomContainer({Key? key, required this.title, required this.number, required this.questionQty})
+      : super(key: key);
   final String title;
   final int number;
   final int questionQty;
@@ -23,24 +23,28 @@ class CustomContainer extends StatelessWidget {
       alignment: Alignment.center,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: GestureDetector(
-          onTap: () {
-            context.goNamed(QuestionsSheetPage.routeName, params: {'rid' : title}, queryParams: {'questionQty' : questionQty.toString()});
-          },
-          child: Row(
-            children: [
-              Text(
-                number.toString(),
-                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Text(
-                title,
-                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
-              ),
-            ],
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              context.goNamed(QuestionsSheetPage.routeName,
+                  params: {'rid': title}, queryParams: {'questionQty': questionQty.toString()});
+            },
+            child: Row(
+              children: [
+                Text(
+                  number.toString(),
+                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
           ),
         ),
       ),
