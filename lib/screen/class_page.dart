@@ -8,6 +8,7 @@ import 'package:cstarimage_testpage/widgets/sizedbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/buttons.dart';
 
@@ -41,7 +42,31 @@ class _EnterPageState extends ConsumerState<ClassPage> {
   Future<void> init() async {
     ref.read(userProvider.notifier).userUnAuthorize();
     await ref.read(classProvider.notifier).classWorkSheetInit();
-    await ref.read(classProvider.notifier).getTodayClassData(DateTime.now());
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final classInfo = prefs.getStringList('class');
+
+    //로컬에 이미 데이터가 있으면 로컬에서 가져오기
+    if (classInfo == null) {
+      print('=======================');
+      print('classInfo from Gsheet');
+      print('=======================');
+      await ref.read(classProvider.notifier).getTodayClassData(DateTime.now());
+    } else {
+      print('=======================');
+      print('classInfo from Local');
+      print('=======================');
+      ref.read(classProvider.notifier).getTodayClassFromDevice(classInfo);
+    }
+  }
+
+  void saveClassInfo(ClassModel classInfo) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setStringList('class', classInfo.propertiesToList());
+    } catch (e) {
+      print('Shared Preference has error $e');
+    }
   }
 
   @override
@@ -103,6 +128,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
                 function: () {
                   final valid = _formKey.currentState!.validate();
                   if ((classData is ClassModel) && (classData.lectureCode == _controller.text) && valid) {
+                    saveClassInfo(classData);
                     ref.read(userProvider.notifier).userAuthorize();
                     context.goNamed(UserPage.routeName);
                   }

@@ -1,20 +1,41 @@
 import 'package:cstarimage_testpage/model/class_model.dart';
+import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
+import 'package:cstarimage_testpage/provider/questions_provider.dart';
 import 'package:cstarimage_testpage/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TestSelectionPage extends ConsumerWidget {
+class TestSelectionPage extends ConsumerStatefulWidget {
   static String get routeName => 'TestSelectionPage';
-  final List<String> tests = [];
 
-  TestSelectionPage({super.key});
+  const TestSelectionPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TestSelectionPage> createState() => _TestSelectionPageState();
+}
 
+class _TestSelectionPageState extends ConsumerState<TestSelectionPage> {
+  final List<String> tests = [];
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(questionListProvider.notifier).reset();
+      ref.read(answerSheetProvider.notifier).reset();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final classInfo = ref.read(classProvider);
-    if(classInfo is ClassModel){
+    if (classInfo is ClassModel) {
+      tests.clear();
       tests.addAll(classInfo.accessibleTests);
     }
 

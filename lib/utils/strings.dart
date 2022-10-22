@@ -1,11 +1,11 @@
-List<String> stringToList(String string){
-  final list = string.split(',');
-  list.first = list.first.trim();
-  list.last = list.last.trim();
-  return list;
+List<String> stringToList(String string, {bool subtract = false}) {
+  if (subtract) {
+    string = string.substring(1, string.length - 1);
+  }
+  return string.split(',').map((string) => string.trim()).toList();
 }
 
-String getYearMonthDate(DateTime dateTime){
+String getYearMonthDate(DateTime dateTime) {
   return dateTime.toString().split(' ')[0];
 }
 

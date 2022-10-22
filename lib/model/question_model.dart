@@ -5,18 +5,20 @@ class QuestionModel {
   final String question;
   final String answerA;
   final String answerB;
-  final String answerC;
+  final String? answerC;
   final String? answerD;
   final String? answerE;
+  final String? answerF;
 
   const QuestionModel({
     required this.number,
     required this.question,
     required this.answerA,
     required this.answerB,
-    required this.answerC,
+    this.answerC,
     this.answerD,
     this.answerE,
+    this.answerF,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +30,7 @@ class QuestionModel {
       'answerC': answerC,
       'answerD': answerD,
       'answerE': answerE,
+      'answerF': answerF,
     };
   }
 
@@ -37,9 +40,10 @@ class QuestionModel {
       question: map['question'] as String,
       answerA: map['answerA'] as String,
       answerB: map['answerB'] as String,
-      answerC: map['answerC'] as String,
+      answerC: (map['answerC'] ?? '') as String,
       answerD: (map['answerD'] ?? '') as String,
       answerE: (map['answerE'] ?? '') as String,
+      answerF: (map['answerF'] ?? '') as String,
     );
   }
 
@@ -51,6 +55,7 @@ class QuestionModel {
     String? answerC,
     String? answerD,
     String? answerE,
+    String? answerF,
   }) {
     return QuestionModel(
       number: number ?? this.number,
@@ -60,16 +65,18 @@ class QuestionModel {
       answerC: answerC ?? this.answerC,
       answerD: answerD ?? this.answerD,
       answerE: answerE ?? this.answerE,
+      answerF: answerF ?? this.answerF,
     );
   }
 
   @override
   String toString() {
-    return 'QuestionModel{number: $number, question: $question, answerA: $answerA, answerB: $answerB, answerC: $answerC, answerD: $answerD, answerE: $answerE}';
+    return 'QuestionModel{number: $number, question: $question, answerA: $answerA, answerB: $answerB, answerC: $answerC, answerD: $answerD, answerE: $answerE, answerF: $answerF}';
   }
 }
 
 abstract class QuestionDataModel {}
+
 
 class QuestionModelsLoading extends QuestionDataModel {}
 

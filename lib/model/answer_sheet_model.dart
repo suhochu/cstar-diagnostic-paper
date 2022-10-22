@@ -1,51 +1,24 @@
 class AnswerSheetModel {
-  List<String> answerSheet;
-  List<String> result;
-  String userName;
-  String userEmail;
-  String testDate;
-  String company;
-  String classPlace;
+  String title;
+  List<String?> answers;
 
   AnswerSheetModel({
-    required this.answerSheet,
-    required this.result,
-    required this.userName,
-    required this.userEmail,
-    required this.testDate,
-    required this.company,
-    required this.classPlace,
+    required this.title,
+    required this.answers,
   });
 
-  factory AnswerSheetModel.initial() {
-    return AnswerSheetModel(
-      answerSheet: [],
-      result: [],
-      company: '',
-      testDate: '',
-      classPlace: '',
-      userEmail: '',
-      userName: '',
-    );
+  factory AnswerSheetModel.initial(){
+    return AnswerSheetModel(title: '', answers: []);
   }
 
   AnswerSheetModel copyWith({
-    List<String>? answerSheet,
-    List<String>? result,
-    String? userName,
-    String? userEmail,
-    String? testDate,
-    String? company,
-    String? classPlace,
+    List<String?>? answers,
+    String? title,
   }) {
     return AnswerSheetModel(
-      answerSheet: answerSheet ?? this.answerSheet,
-      result: result ?? this.result,
-      userName: userName ?? this.userName,
-      userEmail: userEmail ?? this.userEmail,
-      testDate: testDate ?? this.testDate,
-      company: company ?? this.company,
-      classPlace: classPlace ?? this.classPlace,
+      title: title ?? this.title,
+      answers: answers ?? this.answers,
     );
   }
 }
+

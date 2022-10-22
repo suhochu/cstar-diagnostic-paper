@@ -46,4 +46,10 @@ class UserNotifier extends StateNotifier<UserDataModel> {
       state = UserModelError(error: '서버에 문제가 있습니다. 다시 시도 부탁드립니다.');
     }
   }
+
+  void getUserInfoFromDevice(List<String> classInfo){
+    state = UserModelLoading();
+    UserModel userModel = UserModel.fromList(classInfo);
+    state = userModel;
+  }
 }

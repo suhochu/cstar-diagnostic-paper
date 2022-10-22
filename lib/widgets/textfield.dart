@@ -24,7 +24,7 @@ class CustomTextField extends StatelessWidget {
       textAlign: TextAlign.center,
       autofocus: true,
       maxLength: maxLength,
-      showCursor: false,
+      // showCursor: false,
       mouseCursor: SystemMouseCursors.click,
       style: const TextStyle(fontSize: 30, color: Colors.redAccent),
       maxLines: 1,

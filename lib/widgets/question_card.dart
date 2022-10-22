@@ -9,7 +9,7 @@ class QuestionCard extends ConsumerStatefulWidget {
     Key? key,
     required this.questions,
     required this.index,
-    this.questionQty = 4 ,
+    this.questionQty = 4,
   }) : super(key: key);
   final QuestionModel questions;
   final int index;
@@ -20,18 +20,31 @@ class QuestionCard extends ConsumerStatefulWidget {
 }
 
 class _QuestionCardState extends ConsumerState<QuestionCard> {
-  Selections selections = Selections.A;
+  Selections? selectedValue;
+
+  Selections? _setValues() {
+    final List<String?> answerSheet = ref.read(answerSheetProvider).answers;
+    Selections? selection;
+    if (answerSheet.isNotEmpty) {
+      final String? value = answerSheet[widget.index - 1];
+
+      if (value != null) {
+        selection = stringToSelections(answerSheet[widget.index - 1]!)!;
+      }
+    }
+    return selection;
+  }
 
   RadioListTile _getRadioTile(Selections selected, String content) {
+    selectedValue = _setValues();
     return RadioListTile(
       value: selected,
-      groupValue: selections,
+      groupValue: selectedValue,
       contentPadding: const EdgeInsets.only(left: 60),
       activeColor: Colors.redAccent,
       title: Text(content),
       onChanged: (value) {
         setState(() {
-          selections = value!;
           ref.read(answerSheetProvider.notifier).update(widget.index - 1, value);
         });
       },
@@ -57,9 +70,10 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
             ),
             _getRadioTile(Selections.A, 'A  :  ${widget.questions.answerA}'),
             _getRadioTile(Selections.B, 'B  :  ${widget.questions.answerB}'),
-            _getRadioTile(Selections.C, 'C  :  ${widget.questions.answerC}'),
-            if(widget.questionQty >= 4) _getRadioTile(Selections.D, 'D  :  ${widget.questions.answerD}'),
-            if(widget.questionQty >= 5) _getRadioTile(Selections.E, 'E  :  ${widget.questions.answerE}'),
+            if (widget.questionQty >= 3) _getRadioTile(Selections.C, 'C  :  ${widget.questions.answerC}'),
+            if (widget.questionQty >= 4) _getRadioTile(Selections.D, 'D  :  ${widget.questions.answerD}'),
+            if (widget.questionQty >= 5) _getRadioTile(Selections.E, 'E  :  ${widget.questions.answerE}'),
+            if (widget.questionQty >= 6) _getRadioTile(Selections.F, 'F  :  ${widget.questions.answerF}'),
           ],
         ),
       ),

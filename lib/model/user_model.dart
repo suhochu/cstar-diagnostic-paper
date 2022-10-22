@@ -14,7 +14,6 @@ class UserModelAuthorized extends UserDataModel {}
 
 class UserModelLoading extends UserDataModel {}
 
-//gender is, true : man, false : woman
 class UserModel extends UserDataModel {
   String name;
   String company;
@@ -74,6 +73,20 @@ class UserModel extends UserDataModel {
       gender: gender ?? this.gender,
       ages: ages ?? this.ages,
     );
+  }
+
+  factory UserModel.fromList(List<String> list) {
+    return UserModel(
+      name: list[0],
+      company: list[1],
+      email: list[2],
+      gender: list[3],
+      ages: list[4],
+    );
+  }
+
+  List<String> propertiesToList() {
+    return [name, company, email, gender, ages];
   }
 
   @override

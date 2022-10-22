@@ -10,8 +10,9 @@ final questionListProvider = StateNotifierProvider<QuestionListNotifier, Questio
 class QuestionListNotifier extends StateNotifier<QuestionDataModel> {
   final QuestionsRepository repository;
 
-  QuestionListNotifier({required this.repository})
-      : super(
+  QuestionListNotifier({
+    required this.repository,
+  }) : super(
           QuestionModelsLoading(),
         );
 
@@ -28,7 +29,12 @@ class QuestionListNotifier extends StateNotifier<QuestionDataModel> {
       final List<QuestionModel> questionsList = questions.map((question) {
         return QuestionModel.fromMap(question);
       }).toList();
+
       state = QuestionsModel(questions: questionsList);
     }
+  }
+
+  void reset(){
+    state = QuestionModelsLoading();
   }
 }

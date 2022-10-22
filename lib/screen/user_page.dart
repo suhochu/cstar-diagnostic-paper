@@ -1,7 +1,6 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/user_model.dart';
-import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
 import 'package:cstarimage_testpage/provider/user_provider.dart';
 import 'package:cstarimage_testpage/screen/test_selection_page.dart';
 import 'package:cstarimage_testpage/utils/strings.dart';
@@ -12,7 +11,7 @@ import 'package:cstarimage_testpage/widgets/sizedbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPage extends ConsumerStatefulWidget {
   static String get routeName => 'UserInputPage';
@@ -35,9 +34,28 @@ class _UserInputPageState extends ConsumerState<UserPage> {
   @override
   void initState() {
     super.initState();
+    checkUserExist();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       init();
     });
+  }
+
+  Future<void> checkUserExist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userInfo = prefs.getStringList('user');
+
+    //로컬에 이미 데이터가 있으면 로컬에서 가져오기
+    if(userInfo != null) {
+      ref.read(userProvider.notifier).getUserInfoFromDevice(userInfo);
+      print('=======================');
+      print('UserInfo from Local');
+      print('=======================');
+      goToTestSelectionPage();
+    }
+  }
+
+  void goToTestSelectionPage(){
+    context.goNamed(TestSelectionPage.routeName);
   }
 
   Future<void> init() async {
@@ -48,46 +66,55 @@ class _UserInputPageState extends ConsumerState<UserPage> {
     await ref.read(userProvider.notifier).userInsert(user);
   }
 
+  void saveUser(UserModel user) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setStringList('user', user.propertiesToList());
+    } catch (e) {
+      print('Shared Preference has error $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserDataModel userData = ref.watch(userProvider);
+    //todo UserModelUnAuthorized is deleted?
 
-
-    if (userData is UserModelUnAuthorized) {
-      return DefaultLayout(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    '오늘의 교육 코드가 인증 되지 않았습니다.',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    '인증 페이지로 돌아가십시요',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                      onPressed: () {
-                        context.goNamed('/');
-                      },
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                      child: const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            '인증 페이지',
-                            style: TextStyle(fontSize: 20),
-                          ))),
-                ]),
-          ),
-        ),
-      );
-    }
+    // if (userData is UserModelUnAuthorized) {
+    //   return DefaultLayout(
+    //     child: Center(
+    //       child: Padding(
+    //         padding: const EdgeInsets.all(16.0),
+    //         child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: [
+    //               const Text(
+    //                 '오늘의 교육 코드가 인증 되지 않았습니다.',
+    //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+    //               ),
+    //               const SizedBox(height: 20),
+    //               const Text(
+    //                 '인증 페이지로 돌아가십시요',
+    //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+    //               ),
+    //               const SizedBox(height: 20),
+    //               ElevatedButton(
+    //                   onPressed: () {
+    //                     context.goNamed('/');
+    //                   },
+    //                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+    //                   child: const Padding(
+    //                       padding: EdgeInsets.all(10.0),
+    //                       child: Text(
+    //                         '인증 페이지',
+    //                         style: TextStyle(fontSize: 20),
+    //                       ))),
+    //             ]),
+    //       ),
+    //     ),
+    //   );
+    // }
 
     if (userData is UserModelError) {
       return DefaultLayout(
@@ -193,7 +220,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                   child: CustomElevatedButton(
                     function: (userData is UserModelLoading)
                         ? null
-                        : () {
+                        : () async {
                             bool valid = _formKey.currentState!.validate();
                             if (valid) {
                               UserModel user = UserModel(
@@ -203,7 +230,8 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                                   ages: _ages!,
                                   gender: _gender!);
                               userInsert(user);
-                              context.goNamed(TestSelectionPage.routeName);
+                              saveUser(user);
+                              goToTestSelectionPage();
                             }
                           },
                     text: '입장하기',

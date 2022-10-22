@@ -27,8 +27,10 @@ class CustomContainer extends StatelessWidget {
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
             onTap: () {
-              context.goNamed(QuestionsSheetPage.routeName,
-                  params: {'rid': title}, queryParams: {'questionQty': questionQty.toString()});
+              context.pushNamed(QuestionsSheetPage.routeName,
+                  params: {'rid': title},
+                  // queryParams: {'questionQty': questionQty.toString()}
+                  );
             },
             child: Row(
               children: [

@@ -14,7 +14,7 @@ class ClassNotifier extends StateNotifier<ClassDataModel> {
 
   ClassNotifier({required this.repository})
       : super(
-          ClassModelLoading(),
+    ClassModelLoading(),
         );
 
   Future<void> classWorkSheetInit() async {
@@ -29,8 +29,13 @@ class ClassNotifier extends StateNotifier<ClassDataModel> {
       state = ClassModelError(error: '오늘 날짜의 강의가 없습니다.');
       return;
     }
-    ClassModel classModel = ClassModel.fromMap(classData!);
-    classModel = classModel.copyWith(accessibleTests: stringToList(classData['accessibleTests']!));
+    ClassModel classModel = ClassModel.fromMap(classData);
+    state = classModel;
+  }
+
+  void getTodayClassFromDevice(List<String> classInfo){
+    state = ClassModelLoading();
+    ClassModel classModel = ClassModel.fromList(classInfo);
     state = classModel;
   }
 }

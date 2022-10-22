@@ -1,80 +1,97 @@
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
-import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
+import 'package:cstarimage_testpage/utils/strings.dart';
 import 'package:cstarimage_testpage/widgets/buttons.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ResultPage extends ConsumerStatefulWidget {
+class ResultPage extends StatelessWidget {
   static String get routeName => 'ResultPage';
+  final List<String> classInfo = [];
+  final List<String> userInfo = [];
+  final List<AnswerSheetModel> answersSheets = [];
 
-  final int totalQuestionQty;
+  ResultPage({Key? key}) : super(key: key);
 
-  const ResultPage({Key? key, required this.totalQuestionQty}) : super(key: key);
+  Future<void> loadData() async {
+    print('load Data Entered');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  @override
-  ConsumerState<ResultPage> createState() => _ResultPageState();
-}
+    classInfo.addAll(prefs.getStringList('class') ?? []);
+    print(classInfo);
 
-class _ResultPageState extends ConsumerState<ResultPage> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      init();
-    });
-  }
+    userInfo.addAll(prefs.getStringList('user') ?? []);
+    print(userInfo);
 
-  void init() {
-    // ref.read(answerSheetProvider.notifier).initialize(widget.totalQuestionQty);
+    final List testTitles = stringToList(classInfo[2], subtract: true);
+    print(testTitles);
+
+    for (String title in testTitles) {
+      if (prefs.getStringList(title) == null) {
+        print('$title is null');
+      } else {
+        print('$title contents is');
+        print(prefs.getStringList(title));
+
+        final AnswerSheetModel answerSheet = AnswerSheetModel(
+          answers: prefs.getStringList(title)!,
+          title: title,
+        );
+        answersSheets.add(answerSheet);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final result = ref.read(answerSheetProvider);
     final double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(),
-          _getInfo(screenWidth, result.answerSheet.toString(),),
-          _getInfo(screenWidth, result.userEmail.toString(),),
-          _getInfo(screenWidth, result.userName.toString(),),
-          _getInfo(screenWidth, result.testDate.toString(),),
-          _getInfo(screenWidth, result.company.toString(),),
-          const SizedBox(
-            height: 36,
-          ),
-          CustomSizedBox(
-              child: CustomElevatedButton(
-            text: '테스트지 선택 화면으로 이동',
-            function: () {},
-          )),
-          const SizedBox(
-            height: 36,
-          ),
-          CustomSizedBox(
-              child: CustomElevatedButton(
-            text: 'E-mail 로 보내기',
-            function: () {},
-          )),
-          const SizedBox(
-            height: 36,
-          ),
-          CustomSizedBox(
-              child: CustomElevatedButton(
-            text: '종료',
-            function: () {},
-          )),
-        ],
+      body: FutureBuilder(
+        future: loadData(),
+        builder:(context, snapshot) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(),
+            _getInfo(
+              screenWidth,
+              classInfo.toString(),
+            ),
+            _getInfo(
+              screenWidth,
+              userInfo.toString(),
+            ),
+            const SizedBox(
+              height: 36,
+            ),
+            CustomSizedBox(
+                child: CustomElevatedButton(
+              text: '테스트지 선택 화면으로 이동',
+              function: () {},
+            )),
+            const SizedBox(
+              height: 36,
+            ),
+            CustomSizedBox(
+                child: CustomElevatedButton(
+              text: 'E-mail 로 보내기',
+              function: () {},
+            )),
+            const SizedBox(
+              height: 36,
+            ),
+            CustomSizedBox(
+                child: CustomElevatedButton(
+              text: '종료',
+              function: () {},
+            )),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _getInfo(double screenWidth, String text){
+  Widget _getInfo(double screenWidth, String text) {
     return Container(
       width: screenWidth * 0.7,
       height: 100,

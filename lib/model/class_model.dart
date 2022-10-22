@@ -1,3 +1,5 @@
+import 'package:cstarimage_testpage/utils/strings.dart';
+
 abstract class ClassDataModel {}
 
 class ClassModelError extends ClassDataModel {
@@ -14,14 +16,14 @@ class ClassModel extends ClassDataModel {
   String lectureCode;
   String testDate;
   List<String> accessibleTests;
-  String company;
+  String classRoom;
   String place;
 
   ClassModel({
     required this.lectureCode,
     required this.testDate,
     required this.accessibleTests,
-    required this.company,
+    required this.classRoom,
     required this.place,
   });
 
@@ -30,7 +32,7 @@ class ClassModel extends ClassDataModel {
       lectureCode: '',
       testDate: '',
       accessibleTests: [],
-      company: '',
+      classRoom: '',
       place: '',
     );
   }
@@ -41,7 +43,7 @@ class ClassModel extends ClassDataModel {
       'lectureCode': lectureCode,
       'testdate': "'${testDate.toString().split(' ')[0]}",
       'accessibleTests': accessibleTests.toString(),
-      'company': company,
+      'classroom': classRoom,
       'place': place,
     };
   }
@@ -50,8 +52,8 @@ class ClassModel extends ClassDataModel {
     return ClassModel(
       lectureCode: map['lectureCode'] as String,
       testDate: map['testdate'] as String,
-      accessibleTests: [],
-      company: map['company'] as String,
+      accessibleTests: stringToList(map['accessibleTests']! ?? ''),
+      classRoom: map['classroom'] as String,
       place: map['place'] as String,
     );
   }
@@ -60,20 +62,34 @@ class ClassModel extends ClassDataModel {
     String? lectureCode,
     String? testDate,
     List<String>? accessibleTests,
-    String? company,
+    String? classRoom,
     String? place,
   }) {
     return ClassModel(
       lectureCode: lectureCode ?? this.lectureCode,
       testDate: testDate ?? this.testDate,
       accessibleTests: accessibleTests ?? this.accessibleTests,
-      company: company ?? this.company,
+      classRoom: classRoom ?? this.classRoom,
       place: place ?? this.place,
     );
   }
 
+  factory ClassModel.fromList(List<String?> list) {
+    return ClassModel(
+      lectureCode: '',
+      testDate: list[1] as String,
+      accessibleTests: stringToList(list[2]! ?? ''),
+      classRoom: list[3] as String,
+      place: list[4] as String,
+    );
+  }
+
+  List<String> propertiesToList() {
+    return ['', testDate, accessibleTests.toString(), classRoom, place];
+  }
+
   @override
   String toString() {
-    return 'ClassModel{lectureCode: $lectureCode, testDate: $testDate, accessibleTests: $accessibleTests, company: $company, place: $place}';
+    return 'ClassModel{lectureCode: $lectureCode, testDate: $testDate, accessibleTests: $accessibleTests, company: $classRoom, place: $place}';
   }
 }
