@@ -3,6 +3,7 @@ import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/model/user_model.dart';
 import 'package:cstarimage_testpage/screen/result_page_components/color_disposition_diagnosis.dart';
+import 'package:cstarimage_testpage/screen/result_page_components/disposition_diagnosis.dart';
 import 'package:cstarimage_testpage/screen/result_page_components/eic_image_self_diagnosis.dart';
 import 'package:cstarimage_testpage/screen/result_page_components/pitr_diagnosis.dart';
 import 'package:cstarimage_testpage/screen/result_page_components/self_esteem_diagnosis.dart';
@@ -23,6 +24,7 @@ class ResultPage extends StatelessWidget {
   final List<EicDiagnosisResultModel> eicDiagnosisResult = [];
   final List<int> colorDispositionCheckResult = [];
   final List<int> pitrCheckResult = [];
+  final List<DispositionResultModel> disposition1Result = [];
   late final UserModel userModel;
   late final ClassModel classModel;
 
@@ -91,6 +93,11 @@ class ResultPage extends StatelessWidget {
       pitrCheckResult.clear();
       pitrCheckResult.addAll(PITRCheckResult.diagnosis(answerSheet));
     }
+
+    if (title == testsName[6]) {
+      disposition1Result.clear();
+      disposition1Result.addAll(DispositionDiagnosisResult.diagnosis(answerSheet, TYPE.type1));
+    }
   }
 
   @override
@@ -112,7 +119,11 @@ class ResultPage extends StatelessWidget {
                   score: StressDiagnosisResult.score,
                 ),
               if (selfEsteemScore != 0)
-                SelfEsteemResult.buildWidget(context: context, userName: userModel.name, score: selfEsteemScore),
+                SelfEsteemResult.buildWidget(
+                  context: context,
+                  userName: userModel.name,
+                  score: selfEsteemScore,
+                ),
               if (selfLeaderShipResult.isNotEmpty)
                 SelfLeaderShipResult.buildWidget(
                   selfLeaderShipResult: selfLeaderShipResult,
@@ -132,11 +143,16 @@ class ResultPage extends StatelessWidget {
                   colorDispositionResult: colorDispositionCheckResult,
                   context: context,
                   userName: userModel.name,
-                  // score: ColorDispositionCheckResult.score,
                 ),
               if (pitrCheckResult.isNotEmpty)
                 PITRCheckResult.buildWidget(
                   pitrResult: pitrCheckResult,
+                  context: context,
+                  userName: userModel.name,
+                ),
+              if (disposition1Result.isNotEmpty)
+                DispositionDiagnosisResult.buildWidget(
+                  dispositionResult: disposition1Result,
                   context: context,
                   userName: userModel.name,
                 ),

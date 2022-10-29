@@ -56,4 +56,5 @@ const List<String> testsName = [
   'EIC 이미지 셀프 진단',
   'Color Disposition Checklist',
   'PITR',
+  'disposition Test',
 ];

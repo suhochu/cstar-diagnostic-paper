@@ -29,6 +29,10 @@ class TestQuestionPageSelectorUtil {
       return GoogleSheetInfo.pitr;
     }
 
+    if (test == testsName[6]) {
+      return GoogleSheetInfo.dispositionTest1;
+    }
+
     return null;
   }
 }

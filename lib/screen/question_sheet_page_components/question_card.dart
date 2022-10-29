@@ -70,7 +70,7 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
             ),
             _getRadioTile(Selections.A, 'A  :  ${widget.questions.answerA}'),
             _getRadioTile(Selections.B, 'B  :  ${widget.questions.answerB}'),
-            if (widget.questionQty >= 3) _getRadioTile(Selections.C, 'C  :  ${widget.questions.answerC}'),
+            if (widget.questionQty >= 3 && widget.questions.answerC != '') _getRadioTile(Selections.C, 'C  :  ${widget.questions.answerC}'),
             if (widget.questionQty >= 4) _getRadioTile(Selections.D, 'D  :  ${widget.questions.answerD}'),
             if (widget.questionQty >= 5) _getRadioTile(Selections.E, 'E  :  ${widget.questions.answerE}'),
             if (widget.questionQty >= 6) _getRadioTile(Selections.F, 'F  :  ${widget.questions.answerF}'),
