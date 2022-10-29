@@ -35,14 +35,14 @@ class CustomContainer extends StatelessWidget {
               children: [
                 Text(
                   number.toString(),
-                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(
                   width: 16,
                 ),
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
