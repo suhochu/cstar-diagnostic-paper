@@ -38,7 +38,6 @@ class ClassModel extends ClassDataModel {
   }
 
   Map<String, dynamic> toMap() {
-    print(testDate.toString().split(' ')[0]);
     return {
       'lectureCode': lectureCode,
       'testdate': "'${testDate.toString().split(' ')[0]}",
@@ -78,7 +77,7 @@ class ClassModel extends ClassDataModel {
     return ClassModel(
       lectureCode: '',
       testDate: list[1] as String,
-      accessibleTests: stringToList(list[2]! ?? ''),
+      accessibleTests: stringToList(list[2]! ?? '' ,subtract: true),
       classRoom: list[3] as String,
       place: list[4] as String,
     );

@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.maxLength = 20,
+    this.onChanged,
   }) : super(key: key);
   final TextEditingController controller;
   final String? label;
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final int maxLength;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +26,13 @@ class CustomTextField extends StatelessWidget {
       textAlign: TextAlign.center,
       autofocus: true,
       maxLength: maxLength,
-      // showCursor: false,
       mouseCursor: SystemMouseCursors.click,
       style: const TextStyle(fontSize: 30, color: Colors.redAccent),
       maxLines: 1,
       decoration: textFieldInputDecoration(label: label, hint: hint),
       keyboardType: keyboardType,
       validator: validator,
+      onChanged: onChanged,
     );
   }
 }

@@ -15,30 +15,14 @@ class UserNotifier extends StateNotifier<UserDataModel> {
   UserNotifier({
     required this.repository,
   }) : super(
-          UserModelUnAuthorized(),
+          UserModel.initial(),
         );
-
-  void userUnAuthorize() {
-    state = UserModelUnAuthorized();
-  }
-
-  void userAuthorize() {
-    state = UserModelAuthorized();
-  }
 
   Future<void> userWorkSheetInit() async {
     await repository.init();
   }
 
   Future<void> userInsert(UserModel user) async {
-    state = UserModelLoading();
-    UserDataModel userModel;
-    final userFromRep = await repository.isDataExist(user.email);
-    // todo 기존에 있던 유저라면 스넥바를 띄워서 기존 정보를 쓸지 확인
-    if (userFromRep != null && userFromRep.isEmpty) {
-      userModel = UserModel.fromMap(userFromRep);
-      state = userModel;
-    }
     final result = await repository.addRow(user.toMap());
     if (result) {
       state = user;
@@ -47,9 +31,29 @@ class UserNotifier extends StateNotifier<UserDataModel> {
     }
   }
 
-  void getUserInfoFromDevice(List<String> classInfo){
-    state = UserModelLoading();
+  Future<bool> isUserExist(String email) async {
+    final userFromRep = await repository.isDataExist(email);
+    if (userFromRep != null && userFromRep.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<UserModel> updateUserState(String email) async {
+    UserDataModel userModel;
+    final userFromRep = await repository.isDataExist(email);
+    userModel = UserModel.fromMap(userFromRep!);
+    state = userModel;
+    userModel as UserModel;
+    return userModel;
+  }
+
+  void getUserInfoFromDevice(List<String> classInfo) {
     UserModel userModel = UserModel.fromList(classInfo);
     state = userModel;
+  }
+
+  void errorOnSave(){
+    state = UserModelError(error: '저장중에 문제가 발생했습니다. 재실행 부탁드립니다.');
   }
 }

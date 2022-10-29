@@ -14,7 +14,7 @@ class ClassNotifier extends StateNotifier<ClassDataModel> {
 
   ClassNotifier({required this.repository})
       : super(
-    ClassModelLoading(),
+          ClassModelLoading(),
         );
 
   Future<void> classWorkSheetInit() async {
@@ -33,9 +33,13 @@ class ClassNotifier extends StateNotifier<ClassDataModel> {
     state = classModel;
   }
 
-  void getTodayClassFromDevice(List<String> classInfo){
+  void getTodayClassFromDevice(List<String> classInfo) {
     state = ClassModelLoading();
     ClassModel classModel = ClassModel.fromList(classInfo);
     state = classModel;
+  }
+
+  void errorOnSave() {
+    state = ClassModelError(error: '저장중에 문제가 발생했습니다. 재실행 부탁드립니다.');
   }
 }

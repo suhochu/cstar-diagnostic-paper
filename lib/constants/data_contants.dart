@@ -48,3 +48,12 @@ final List<String> agesItems = [
 List<String?> initialAnswerSheet (int length) {
   return List.generate(length, (index) => null);
 }
+
+const List<String> testsName = [
+  '스트레스 진단',
+  '자존감 진단',
+  '리더십 유형',
+  'EIC 이미지 셀프 진단',
+  'Color Disposition Checklist',
+  'PITR',
+];

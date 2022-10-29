@@ -9,4 +9,5 @@ class GoogleSheetInfo {
   static const String leadershipQuestions = 'leadership_questions';
   static const String eicImageQuestions = 'eic_image';
   static const String colorDispositionChecklist = 'color_disposition';
+  static const String pitr = 'PITR';
 }

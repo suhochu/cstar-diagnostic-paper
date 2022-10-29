@@ -1,12 +1,16 @@
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/constants/google_sheet_info.dart';
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/question_model.dart';
 import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
 import 'package:cstarimage_testpage/provider/questions_provider.dart';
-import 'package:cstarimage_testpage/screen/question_sheet_page_components/self_test_diagnosis.dart';
+import 'package:cstarimage_testpage/screen/question_sheet_page_components/color_disposition_subtitle_components.dart';
+import 'package:cstarimage_testpage/screen/question_sheet_page_components/guestion_card_color_disposition.dart';
+import 'package:cstarimage_testpage/screen/question_sheet_page_components/pitr_card.dart';
+import 'package:cstarimage_testpage/screen/question_sheet_page_components/self_leader_diagnosis_subtitle_components.dart';
 import 'package:cstarimage_testpage/screen/result_page.dart';
 import 'package:cstarimage_testpage/screen/question_sheet_page_components/test_Question_Page_Selector_Util.dart';
-import 'package:cstarimage_testpage/widgets/question_card.dart';
+import 'package:cstarimage_testpage/screen/question_sheet_page_components/question_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,12 +20,9 @@ class QuestionsSheetPage extends ConsumerStatefulWidget {
   static String get routeName => 'QuestionsSheet';
   final String title;
 
-  // final int questionQty;
-
   const QuestionsSheetPage({
     super.key,
     required this.title,
-    // required this.questionQty,
   });
 
   @override
@@ -46,6 +47,10 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
     await ref.read(questionListProvider.notifier).selectQuestionSheet(questionPage);
     setSubWidgets(questionPage);
     await ref.read(questionListProvider.notifier).getAllQuestions();
+    final questions = ref.read(questionListProvider);
+    if (questions is QuestionsModel) {
+      initAnswerSheet(questions.questions.length);
+    }
   }
 
   void setSubWidgets(String? pageName) {
@@ -53,12 +58,22 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
       subTitle = SelfTestDiagnosisPageComponent.subtitle;
       explanations = SelfTestDiagnosisPageComponent.explanations;
     }
+    if (pageName == GoogleSheetInfo.colorDispositionChecklist) {
+      subTitle = ColorDispositionSubtitleComponents.subtitle;
+    }
   }
 
-  void initAnswerSheet(int listLength) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  Future<void> initAnswerSheet(int listLength) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final List<String>? data = prefs.getStringList(widget.title);
+    if (data != null) {
+      ref.read(answerSheetProvider.notifier).initializeFromList(data);
+    } else {
       ref.read(answerSheetProvider.notifier).initialize(listLength);
-    });
+      if (widget.title == testsName[4]) {
+        ref.read(answerSheetProvider.notifier).updateAllAnswersByValue('B');
+      }
+    }
   }
 
   void saveAnswersAtLocal() async {
@@ -68,7 +83,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
     prefs.setStringList(widget.title, nonNullableAnswerList);
   }
 
-  int setQuestionQty(List<QuestionModel> questions) {
+  Future<int> setQuestionQty(List<QuestionModel> questions) async {
     if (questions[0].answerC == '') {
       return 2;
     }
@@ -86,7 +101,6 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     final questionsData = ref.watch(questionListProvider);
     if (questionsData is QuestionModelsLoading) {
       return const Center(
@@ -115,89 +129,153 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
 
     questionsData as QuestionsModel;
     final List<QuestionModel> questions = questionsData.questions;
-    initAnswerSheet(questions.length);
-    int questionQty = setQuestionQty(questions);
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: questions.length + 2,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Column(
-              children: [
-                Container(
-                  alignment: Alignment.centerRight,
-                  margin: const EdgeInsets.only(top: 8, right: 16),
-                  child: const Text(
-                    "본 진단지 저작권은 '씨스타이미지'에 있습니다.",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 30, bottom: 30),
-                  child: Text(
-                    widget.title,
-                    style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
-                  ),
-                ),
-                if (subTitle != null) subTitle!,
-                const SizedBox(height: 16),
-                if (explanations != null) explanations!,
-              ],
-            );
-          }
+    int questionLength = questions.length;
+    if (widget.title == 'Color Disposition Checklist') {
+      questionLength = 20;
+    }
 
-          if (index == questions.length + 1) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (!ref.read(answerSheetProvider).answers.contains(null)) {
-                    saveAnswersAtLocal();
-                    context.goNamed(
-                      ResultPage.routeName,
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        content: Text(
-                          '선택 안된 항목이 있습니다. 전부 작성 부탁드립니다.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+    return Scaffold(
+      body: FutureBuilder(
+          future: setQuestionQty(questions),
+          builder: (context, snapshot) => snapshot.connectionState == ConnectionState.done
+              ? ListView.builder(
+                  itemCount: questionLength + 2,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerRight,
+                            margin: const EdgeInsets.only(top: 8, right: 16),
+                            child: const Text(
+                              "본 진단지 저작권은 '씨스타이미지'에 있습니다.",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(top: 30, bottom: 30),
+                            child: Text(
+                              widget.title,
+                              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          if (subTitle != null) subTitle!,
+                          const SizedBox(height: 16),
+                          if (explanations != null) explanations!,
+                        ],
+                      );
+                    }
+
+                    if (index == questionLength + 1) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (!ref.read(answerSheetProvider).answers.contains(null)) {
+                              if (widget.title == 'Color Disposition Checklist' && !colorDispositionValidator()) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    content: Text(
+                                      '2가지 항목이상 점수를 주신 않은 문항이 있습니다.\n모든 문항에 대해서 2가지 항목 이상에 대해서 1점 이상의 점수를 주세요',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                saveAnswersAtLocal();
+                                context.goNamed(
+                                  ResultPage.routeName,
+                                );
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  duration: Duration(seconds: 2),
+                                  content: Text(
+                                    '선택 안된 항목이 있습니다. 전부 작성 부탁드립니다.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                          child: const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(
+                              '제출하기',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    '제출하기',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-          return QuestionCard(
-            questions: questionsData.questions[index - 1],
-            index: index,
-            questionQty: questionQty,
-          );
-        },
-      ),
+                      );
+                    }
+                    return widget.title == testsName[4]
+                        ? widget.title == testsName[5]
+                            ? PitrCard(questions: questionsData.questions[index - 1], index: index)
+                            : ColorDispositionQuestionCard(
+                                questions: [
+                                  questionsData.questions[index - 1],
+                                  questionsData.questions[(index + 20) - 1],
+                                  questionsData.questions[(index + 40) - 1],
+                                  questionsData.questions[(index + 60) - 1],
+                                ],
+                                index: index,
+                                questionQty: snapshot.data!,
+                              )
+                        : QuestionCard(
+                            questions: questionsData.questions[index - 1],
+                            index: index,
+                            questionQty: snapshot.data!,
+                          );
+                  },
+                )
+              : const Center(
+                  child: CircularProgressIndicator(color: Colors.redAccent, value: 20),
+                )),
     );
   }
-}
 
+  bool colorDispositionValidator() {
+    final List<String?> result = ref.read(answerSheetProvider).answers;
+    bool isValid = false;
+    for (int i = 0; i < 20; i++) {
+      final List<String?> toBeValidated = [
+        result[i],
+        result[i + 20],
+        result[i + 40],
+        result[i + 60],
+      ];
+      int count = 0;
+      for (var i in toBeValidated) {
+        if (i == 'B') {
+          count++;
+        }
+      }
+      if (count > 2) {
+        break;
+      }
+
+      if (i == 19) {
+        isValid = true;
+      }
+    }
+    return isValid;
+  }
+}

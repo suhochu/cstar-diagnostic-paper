@@ -1,7 +1,6 @@
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
-import 'package:cstarimage_testpage/provider/user_provider.dart';
 import 'package:cstarimage_testpage/screen/user_page.dart';
 import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
@@ -40,7 +39,6 @@ class _EnterPageState extends ConsumerState<ClassPage> {
   }
 
   Future<void> init() async {
-    ref.read(userProvider.notifier).userUnAuthorize();
     await ref.read(classProvider.notifier).classWorkSheetInit();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,7 +63,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setStringList('class', classInfo.propertiesToList());
     } catch (e) {
-      print('Shared Preference has error $e');
+      ref.read(classProvider.notifier).errorOnSave();
     }
   }
 
@@ -129,7 +127,6 @@ class _EnterPageState extends ConsumerState<ClassPage> {
                   final valid = _formKey.currentState!.validate();
                   if ((classData is ClassModel) && (classData.lectureCode == _controller.text) && valid) {
                     saveClassInfo(classData);
-                    ref.read(userProvider.notifier).userAuthorize();
                     context.goNamed(UserPage.routeName);
                   }
                   if ((classData is ClassModel) && (classData.lectureCode != _controller.text) && valid) {

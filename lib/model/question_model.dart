@@ -77,7 +77,6 @@ class QuestionModel {
 
 abstract class QuestionDataModel {}
 
-
 class QuestionModelsLoading extends QuestionDataModel {}
 
 class QuestionModelsError extends QuestionDataModel {

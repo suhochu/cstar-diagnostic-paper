@@ -1,25 +1,32 @@
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/constants/google_sheet_info.dart';
+
+
 
 class TestQuestionPageSelectorUtil {
   String? testsRouteSelector(String test) {
-    if (test == '스트레스 진단') {
+    if (test == testsName[0]) {
       return GoogleSheetInfo.stressResponseQuestions;
     }
 
-    if (test == '자존감 진단') {
+    if (test == testsName[1]) {
       return GoogleSheetInfo.selfEsteemQuestions;
     }
 
-    if (test == '리더십 유형') {
+    if (test == testsName[2]) {
       return GoogleSheetInfo.leadershipQuestions;
     }
 
-    if (test == 'EIC 이미지 셀프 진단'){
+    if (test == testsName[3]) {
       return GoogleSheetInfo.eicImageQuestions;
     }
 
-    if (test == 'Color Disposition Checklist'){
+    if (test == testsName[4]) {
       return GoogleSheetInfo.colorDispositionChecklist;
+    }
+
+    if (test == testsName[5]) {
+      return GoogleSheetInfo.pitr;
     }
 
     return null;

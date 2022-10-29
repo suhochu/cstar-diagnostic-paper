@@ -8,12 +8,6 @@ class UserModelError extends UserDataModel {
   });
 }
 
-class UserModelUnAuthorized extends UserDataModel {}
-
-class UserModelAuthorized extends UserDataModel {}
-
-class UserModelLoading extends UserDataModel {}
-
 class UserModel extends UserDataModel {
   String name;
   String company;

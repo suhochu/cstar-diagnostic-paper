@@ -18,6 +18,15 @@ class AnswerListNotifier extends StateNotifier<AnswerSheetModel> {
     state = state.copyWith(answers: initialAnswerSheet(questionQty));
   }
 
+  void initializeFromList(List<String>? data) {
+    state = state.copyWith(answers: data);
+  }
+
+  void updateAllAnswersByValue(String value) {
+    List<String>? answers = List.generate(state.answers.length, (index) => value);
+    state = state.copyWith(answers: answers);
+  }
+
   void reset() {
     state = AnswerSheetModel.initial();
   }
@@ -25,7 +34,6 @@ class AnswerListNotifier extends StateNotifier<AnswerSheetModel> {
   void update(int index, Selections selection) {
     String answer = 'A';
     List<String?> answerMap = state.answers;
-
 
     switch (selection) {
       case Selections.A:

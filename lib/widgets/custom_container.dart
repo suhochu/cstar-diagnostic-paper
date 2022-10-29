@@ -29,7 +29,6 @@ class CustomContainer extends StatelessWidget {
             onTap: () {
               context.pushNamed(QuestionsSheetPage.routeName,
                   params: {'rid': title},
-                  // queryParams: {'questionQty': questionQty.toString()}
                   );
             },
             child: Row(

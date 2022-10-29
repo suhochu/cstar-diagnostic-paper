@@ -1,53 +1,71 @@
-import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
-import 'package:cstarimage_testpage/provider/class_provider.dart';
 import 'package:cstarimage_testpage/provider/questions_provider.dart';
+import 'package:cstarimage_testpage/screen/result_page.dart';
+import 'package:cstarimage_testpage/utils/strings.dart';
+import 'package:cstarimage_testpage/widgets/buttons.dart';
 import 'package:cstarimage_testpage/widgets/custom_container.dart';
+import 'package:cstarimage_testpage/widgets/sizedbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TestSelectionPage extends ConsumerStatefulWidget {
+class TestSelectionPage extends ConsumerWidget {
   static String get routeName => 'TestSelectionPage';
 
-  const TestSelectionPage({super.key});
+  TestSelectionPage({super.key});
 
-  @override
-  ConsumerState<TestSelectionPage> createState() => _TestSelectionPageState();
-}
-
-class _TestSelectionPageState extends ConsumerState<TestSelectionPage> {
   final List<String> tests = [];
 
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
 
-  void init() async {
+  void init(WidgetRef ref) async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(questionListProvider.notifier).reset();
       ref.read(answerSheetProvider.notifier).reset();
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final classInfo = ref.read(classProvider);
-    if (classInfo is ClassModel) {
-      tests.clear();
-      tests.addAll(classInfo.accessibleTests);
-    }
+  Future<void> loadClassInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final classInfo = prefs.getStringList('class');
+    final accessibleTests = stringToList(classInfo![2], subtract: true);
+    tests.clear();
+    tests.addAll(accessibleTests);
+  }
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    init(ref);
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(30),
-        child: ListView.builder(
-          itemCount: tests.length,
-          itemBuilder: (context, index) => CustomContainer(
-            title: tests[index],
-            number: index + 1,
-            questionQty: tests.isEmpty ? 4 : tests.length,
+      body: FutureBuilder(
+        future: loadClassInfo(),
+        builder:  (context, snapshot) => Padding(
+          padding: const EdgeInsets.all(30),
+          child: ListView.builder(
+            itemCount: tests.length + 1,
+            itemBuilder: (context, index) {
+              if(index == tests.length) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 36),
+                    CustomSizedBox(
+                        child: CustomElevatedButton(
+                          text: '결과 화면으로 이동',
+                          function: () {
+                            context.goNamed(ResultPage.routeName);
+                          },
+                        )),
+                  ],
+                );
+              }
+
+
+              return CustomContainer(
+              title: tests[index],
+              number: index + 1,
+              questionQty: tests.isEmpty ? 4 : tests.length,
+            );
+            },
           ),
         ),
       ),

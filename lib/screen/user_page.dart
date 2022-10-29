@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/user_model.dart';
@@ -27,6 +28,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
   final TextEditingController _companyController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  Timer? _deBounce;
 
   String? _gender;
   String? _ages;
@@ -34,27 +36,84 @@ class _UserInputPageState extends ConsumerState<UserPage> {
   @override
   void initState() {
     super.initState();
-    checkUserExist();
+    isUserExistInLocal();
+    _emailController.addListener(() {
+      _onSearchChanged(_emailController.text);
+    });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       init();
     });
   }
 
-  Future<void> checkUserExist() async {
+  Future<void> isUserExistInLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final userInfo = prefs.getStringList('user');
 
     //로컬에 이미 데이터가 있으면 로컬에서 가져오기
-    if(userInfo != null) {
+    if (userInfo != null) {
       ref.read(userProvider.notifier).getUserInfoFromDevice(userInfo);
       print('=======================');
       print('UserInfo from Local');
       print('=======================');
-      goToTestSelectionPage();
+
+      bool isUserValid = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text(
+                  'User 정보가 이미 존재 합니다. User 정보를 재입력 하시겠습니까?',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                ),
+                actions: [
+                  ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        '예',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        '아니요',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ) ??
+          false;
+      if (!isUserValid) {
+        goToTestSelectionPage();
+      }
     }
   }
 
-  void goToTestSelectionPage(){
+  _onSearchChanged(String text) {
+    if (_deBounce?.isActive ?? false) _deBounce?.cancel();
+    _deBounce = Timer(const Duration(milliseconds: 500), () async {
+      if (await checkUserInfoFromDB(_emailController.text)) {
+        final user = await ref.read(userProvider.notifier).updateUserState(_emailController.text);
+        saveUser(user);
+        goToTestSelectionPage();
+      } else {
+        _deBounce?.cancel();
+      }
+    });
+  }
+
+  void goToTestSelectionPage() {
     context.goNamed(TestSelectionPage.routeName);
   }
 
@@ -71,50 +130,60 @@ class _UserInputPageState extends ConsumerState<UserPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setStringList('user', user.propertiesToList());
     } catch (e) {
-      print('Shared Preference has error $e');
+      ref.read(userProvider.notifier).errorOnSave();
     }
+  }
+
+  Future<bool> checkUserInfoFromDB(String email) async {
+    String userEmail = _emailController.text;
+    final bool isUserExist = await ref.read(userProvider.notifier).isUserExist(userEmail);
+    bool isUserValid = false;
+    if (isUserExist) {
+      isUserValid = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  '$email을 사용하는 회원님이 이미 데이터 베이스에 존재합니다. \n데이터 베이스에서 불러올까요?',
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                ),
+                actions: [
+                  ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        '불러오기',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        '불러오지 않기',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ) ??
+          false;
+    }
+    return isUserValid;
   }
 
   @override
   Widget build(BuildContext context) {
     UserDataModel userData = ref.watch(userProvider);
-    //todo UserModelUnAuthorized is deleted?
-
-    // if (userData is UserModelUnAuthorized) {
-    //   return DefaultLayout(
-    //     child: Center(
-    //       child: Padding(
-    //         padding: const EdgeInsets.all(16.0),
-    //         child: Column(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             crossAxisAlignment: CrossAxisAlignment.center,
-    //             children: [
-    //               const Text(
-    //                 '오늘의 교육 코드가 인증 되지 않았습니다.',
-    //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-    //               ),
-    //               const SizedBox(height: 20),
-    //               const Text(
-    //                 '인증 페이지로 돌아가십시요',
-    //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-    //               ),
-    //               const SizedBox(height: 20),
-    //               ElevatedButton(
-    //                   onPressed: () {
-    //                     context.goNamed('/');
-    //                   },
-    //                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-    //                   child: const Padding(
-    //                       padding: EdgeInsets.all(10.0),
-    //                       child: Text(
-    //                         '인증 페이지',
-    //                         style: TextStyle(fontSize: 20),
-    //                       ))),
-    //             ]),
-    //       ),
-    //     ),
-    //   );
-    // }
 
     if (userData is UserModelError) {
       return DefaultLayout(
@@ -144,6 +213,18 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                 const SizedBox(height: 60),
                 CustomSizedBox(
                   child: CustomTextField(
+                    hint: 'E-mail 을 입력하세요',
+                    label: 'E-mail',
+                    maxLength: 40,
+                    controller: _emailController,
+                    validator: validateEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {},
+                  ),
+                ),
+                const SizedBox(height: 36),
+                CustomSizedBox(
+                  child: CustomTextField(
                     hint: '이름을 입력하세요',
                     label: '이름',
                     controller: _nameController,
@@ -153,6 +234,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       }
                       return null;
                     },
+                    keyboardType: TextInputType.name,
                   ),
                 ),
                 const SizedBox(height: 36),
@@ -167,16 +249,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       }
                       return null;
                     },
-                  ),
-                ),
-                const SizedBox(height: 36),
-                CustomSizedBox(
-                  child: CustomTextField(
-                    hint: 'E-mail 을 입력하세요',
-                    label: 'E-mail',
-                    maxLength: 40,
-                    controller: _emailController,
-                    validator: validateEmail,
+                    keyboardType: TextInputType.name,
                   ),
                 ),
                 const SizedBox(height: 36),
@@ -194,6 +267,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       if (val == null) {
                         return '성별을 선택하세요';
                       }
+                      return null;
                     },
                   ),
                 ),
@@ -212,28 +286,27 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       if (val == null) {
                         return '나이대를 선택하세요';
                       }
+                      return null;
                     },
                   ),
                 ),
                 const SizedBox(height: 60),
                 CustomSizedBox(
                   child: CustomElevatedButton(
-                    function: (userData is UserModelLoading)
-                        ? null
-                        : () async {
-                            bool valid = _formKey.currentState!.validate();
-                            if (valid) {
-                              UserModel user = UserModel(
-                                  name: _nameController.text.trim(),
-                                  company: _companyController.text.trim(),
-                                  email: _emailController.text.trim(),
-                                  ages: _ages!,
-                                  gender: _gender!);
-                              userInsert(user);
-                              saveUser(user);
-                              goToTestSelectionPage();
-                            }
-                          },
+                    function: () async {
+                      bool valid = _formKey.currentState!.validate();
+                      if (valid) {
+                        UserModel user = UserModel(
+                            name: _nameController.text.trim(),
+                            company: _companyController.text.trim(),
+                            email: _emailController.text.trim(),
+                            ages: _ages!,
+                            gender: _gender!);
+                        userInsert(user);
+                        saveUser(user);
+                        goToTestSelectionPage();
+                      }
+                    },
                     text: '입장하기',
                   ),
                 ),

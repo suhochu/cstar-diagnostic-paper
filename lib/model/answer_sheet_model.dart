@@ -7,7 +7,7 @@ class AnswerSheetModel {
     required this.answers,
   });
 
-  factory AnswerSheetModel.initial(){
+  factory AnswerSheetModel.initial() {
     return AnswerSheetModel(title: '', answers: []);
   }
 
@@ -22,3 +22,28 @@ class AnswerSheetModel {
   }
 }
 
+class SelfLeaderShipResultModel {
+  String type;
+  String explanation;
+
+  SelfLeaderShipResultModel({
+    required this.type,
+    required this.explanation,
+  });
+}
+
+class StressDiagnosisResultModel {
+  String type;
+
+  StressDiagnosisResultModel({
+    required this.type,
+  });
+}
+
+class EicDiagnosisResultModel {
+  String type;
+
+  EicDiagnosisResultModel({
+    required this.type,
+  });
+}
