@@ -62,7 +62,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
               return AlertDialog(
                 title: const Text(
                   'User 정보가 이미 존재 합니다. User 정보를 재입력 하시겠습니까?',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 actions: [
                   ElevatedButton(
@@ -73,7 +73,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       padding: EdgeInsets.all(5),
                       child: Text(
                         '예',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ),
@@ -85,7 +85,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       padding: EdgeInsets.all(5),
                       child: Text(
                         '아니요',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ),
@@ -145,7 +145,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
               return AlertDialog(
                 title: Text(
                   '$email을 사용하는 회원님이 이미 데이터 베이스에 존재합니다. \n데이터 베이스에서 불러올까요?',
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 actions: [
                   ElevatedButton(
@@ -156,7 +156,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       padding: EdgeInsets.all(5),
                       child: Text(
                         '불러오기',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ),
@@ -168,7 +168,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                       padding: EdgeInsets.all(5),
                       child: Text(
                         '불러오지 않기',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ),
@@ -191,7 +191,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
           child: Text(
             userData.error,
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -210,7 +210,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(),
-                const SizedBox(height: 60),
+                const SizedBox(height: 40),
                 CustomSizedBox(
                   child: CustomTextField(
                     hint: 'E-mail 을 입력하세요',
@@ -219,10 +219,9 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                     controller: _emailController,
                     validator: validateEmail,
                     keyboardType: TextInputType.emailAddress,
-                    onChanged: (value) {},
                   ),
                 ),
-                const SizedBox(height: 36),
+                const SizedBox(height: 24),
                 CustomSizedBox(
                   child: CustomTextField(
                     hint: '이름을 입력하세요',
@@ -237,7 +236,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                     keyboardType: TextInputType.name,
                   ),
                 ),
-                const SizedBox(height: 36),
+                const SizedBox(height: 24),
                 CustomSizedBox(
                   child: CustomTextField(
                     hint: '회사을 입력하세요',
@@ -252,7 +251,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                     keyboardType: TextInputType.name,
                   ),
                 ),
-                const SizedBox(height: 36),
+                const SizedBox(height: 24),
                 CustomSizedBox(
                   child: CustomDropDownButton(
                     hint: '성별을 선택하세요',
@@ -271,7 +270,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                     },
                   ),
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 40),
                 CustomSizedBox(
                   child: CustomDropDownButton(
                     hint: '나이대을 선택하세요',
@@ -290,7 +289,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                     },
                   ),
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 40),
                 CustomSizedBox(
                   child: CustomElevatedButton(
                     function: () async {

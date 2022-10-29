@@ -1,6 +1,7 @@
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
+import 'package:cstarimage_testpage/screen/test_selection_page.dart';
 import 'package:cstarimage_testpage/screen/user_page.dart';
 import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
@@ -27,6 +28,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
   @override
   void initState() {
     super.initState();
+    isAlreadyAuthorized();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       init();
     });
@@ -36,6 +38,53 @@ class _EnterPageState extends ConsumerState<ClassPage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+  }
+
+  void isAlreadyAuthorized() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final classInfo = prefs.getStringList('class');
+
+    //로컬에 이미 데이터가 있으면 로컬에서 가져오기
+    if (classInfo != null) {
+
+      bool? isAlreadyAuthorized = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+                '이미 오늘의 코드를 인증 하셨습니다. User 정보 입력 페이지 혹은 진단지 선택 페이지로 이동합니다.',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+            actions: [
+              ElevatedButton(
+                style:
+                ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                onPressed: () => context.goNamed(UserPage.routeName),
+                child: const Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    'User 정보 입력',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style:
+                ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                onPressed: () => context.goNamed(TestSelectionPage.routeName),
+                child: const Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    '진단지 선택',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   Future<void> init() async {
@@ -70,15 +119,24 @@ class _EnterPageState extends ConsumerState<ClassPage> {
   @override
   Widget build(BuildContext context) {
     final ClassDataModel classData = ref.watch(classProvider);
+    final Size size = MediaQuery.of(context).size;
 
     if (classData is ClassModelLoading) {
-      return const Center(
-        child: SizedBox(
-          width: 200,
-          height: 200,
-          child: CircularProgressIndicator(
-            color: Colors.redAccent,
-          ),
+      return DefaultLayout(
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: size.height / 7,
+              left: size.width /2 - 50,
+              child: const SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -88,7 +146,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
           child: Text(
             classData.error,
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),

@@ -12,9 +12,9 @@ class CustomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 20),
+      margin: const EdgeInsets.symmetric(vertical: 15),
       width: MediaQuery.of(context).size.width * 0.8,
-      height: 100,
+      height: 70,
       decoration: BoxDecoration(
         color: Colors.white38,
         borderRadius: BorderRadius.circular(10),
@@ -22,7 +22,7 @@ class CustomContainer extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
@@ -35,14 +35,14 @@ class CustomContainer extends StatelessWidget {
               children: [
                 Text(
                   number.toString(),
-                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(
                   width: 16,
                 ),
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
               ],
             ),

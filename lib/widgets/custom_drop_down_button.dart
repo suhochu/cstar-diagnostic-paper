@@ -10,10 +10,10 @@ class CustomDropDownButton extends StatelessWidget {
     required this.onSave,
     required this.onChanged,
     this.validator,
-    this.textSize = 24,
-    this.hintSize = 20,
-    this.buttonHeight = 40,
-    this.iconSize = 30,
+    this.textSize = 18,
+    this.hintSize = 16,
+    this.buttonHeight = 30,
+    this.iconSize = 24,
     this.value,
   }) : super(key: key);
   final String hint;

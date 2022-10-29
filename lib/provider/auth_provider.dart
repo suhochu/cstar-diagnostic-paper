@@ -84,21 +84,6 @@ class AuthProvider extends ChangeNotifier {
         return '/${UserPage.routeName}';
       }
     }
-
-    if (classPage) {
-      if (prefs.getStringList('class') != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            content: Text(
-              '이미 오늘의 코드를 인증 하셨습니다.',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        );
-        return '/${UserPage.routeName}';
-      }
-    }
+    return null;
   }
 }

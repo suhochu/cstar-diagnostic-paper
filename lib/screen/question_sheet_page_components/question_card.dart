@@ -40,9 +40,14 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
     return RadioListTile(
       value: selected,
       groupValue: selectedValue,
-      contentPadding: const EdgeInsets.only(left: 60),
+      contentPadding: const EdgeInsets.only(left: 20),
       activeColor: Colors.redAccent,
-      title: Text(content),
+      title: Flexible(
+        child: Text(
+          content,
+          style: const TextStyle(fontSize: 14),
+        ),
+      ),
       onChanged: (value) {
         setState(() {
           ref.read(answerSheetProvider.notifier).update(widget.index - 1, value);
@@ -63,17 +68,31 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: Text(
-                'Q${widget.index}.    ${widget.questions.question}',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              title: Row(
+                children: [
+                  Text(
+                    'Q${widget.index}.',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500,),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: Text(
+                      widget.questions.question,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                  )
+                ],
               ),
             ),
-            _getRadioTile(Selections.A, 'A  :  ${widget.questions.answerA}'),
-            _getRadioTile(Selections.B, 'B  :  ${widget.questions.answerB}'),
-            if (widget.questionQty >= 3 && widget.questions.answerC != '') _getRadioTile(Selections.C, 'C  :  ${widget.questions.answerC}'),
-            if (widget.questionQty >= 4) _getRadioTile(Selections.D, 'D  :  ${widget.questions.answerD}'),
-            if (widget.questionQty >= 5) _getRadioTile(Selections.E, 'E  :  ${widget.questions.answerE}'),
-            if (widget.questionQty >= 6) _getRadioTile(Selections.F, 'F  :  ${widget.questions.answerF}'),
+            _getRadioTile(Selections.A, widget.questions.answerA),
+            _getRadioTile(Selections.B, widget.questions.answerB),
+            if (widget.questionQty >= 3 && widget.questions.answerC != '')
+              _getRadioTile(Selections.C, widget.questions.answerC!),
+            if (widget.questionQty >= 4) _getRadioTile(Selections.D, widget.questions.answerD!),
+            if (widget.questionQty >= 5) _getRadioTile(Selections.E, widget.questions.answerE!),
+            if (widget.questionQty >= 6) _getRadioTile(Selections.F, widget.questions.answerF!),
           ],
         ),
       ),

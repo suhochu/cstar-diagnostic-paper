@@ -102,14 +102,24 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
   @override
   Widget build(BuildContext context) {
     final questionsData = ref.watch(questionListProvider);
+    final Size size = MediaQuery.of(context).size;
+
     if (questionsData is QuestionModelsLoading) {
-      return const Center(
-        child: SizedBox(
-          width: 200,
-          height: 200,
-          child: CircularProgressIndicator(
-            color: Colors.redAccent,
-          ),
+      return DefaultLayout(
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: size.height / 7,
+              left: size.width / 2 - 50,
+              child: const SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -119,7 +129,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
           child: Text(
             questionsData.error,
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -160,11 +170,11 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
                             margin: const EdgeInsets.only(top: 30, bottom: 30),
                             child: Text(
                               widget.title,
-                              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
                             ),
                           ),
                           if (subTitle != null) subTitle!,
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 8),
                           if (explanations != null) explanations!,
                         ],
                       );
@@ -184,7 +194,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
                                       '2가지 항목이상 점수를 주신 않은 문항이 있습니다.\n모든 문항에 대해서 2가지 항목 이상에 대해서 1점 이상의 점수를 주세요',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -204,7 +214,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
                                     '선택 안된 항목이 있습니다. 전부 작성 부탁드립니다.',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -218,7 +228,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
                             child: Text(
                               '제출하기',
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -246,9 +256,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
                           );
                   },
                 )
-              : const Center(
-                  child: CircularProgressIndicator(color: Colors.redAccent, value: 20),
-                )),
+              : Container()),
     );
   }
 

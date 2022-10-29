@@ -40,7 +40,7 @@ class TestSelectionPage extends ConsumerWidget {
       body: FutureBuilder(
         future: loadClassInfo(),
         builder:  (context, snapshot) => Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(20),
           child: ListView.builder(
             itemCount: tests.length + 1,
             itemBuilder: (context, index) {

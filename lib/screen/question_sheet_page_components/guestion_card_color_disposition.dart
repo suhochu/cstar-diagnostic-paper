@@ -60,11 +60,11 @@ class _QuestionCardState extends ConsumerState<ColorDispositionQuestionCard> {
           width: 50,
           child: Text(
             'Q${widget.index}.',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
         const SizedBox(
-          width: 30,
+          width: 10,
         ),
         Column(
           children: [
@@ -81,13 +81,7 @@ class _QuestionCardState extends ConsumerState<ColorDispositionQuestionCard> {
               index: widget.index + 20 - 1,
               initialValue: areChecked[1],
             ),
-          ],
-        ),
-        const SizedBox(
-          width: 30,
-        ),
-        Column(
-          children: [
+            const SizedBox(height: 10),
             CustomCheckBox(
               text: widget.questions[2].question,
               ref: ref,
@@ -142,8 +136,10 @@ class CustomCheckBox extends StatelessWidget {
       valueListenable: _isChecked,
       builder: (BuildContext context, bool value, Widget? child) {
         return SizedBox(
-          width: 250,
+          width: 200,
           child: CheckboxListTile(
+            dense: true,
+            controlAffinity: ListTileControlAffinity.leading,
             value: value,
             selected: value,
             activeColor: Colors.redAccent,
@@ -153,7 +149,7 @@ class CustomCheckBox extends StatelessWidget {
             },
             title: Text(
               text,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
         );
