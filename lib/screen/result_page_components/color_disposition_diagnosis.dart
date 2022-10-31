@@ -45,7 +45,6 @@ class ColorDispositionCheckResult {
 
   static List<int> diagnosis(AnswerSheetModel answerSheet) {
     List<String?> answers = answerSheet.answers;
-    print('answerSheet ${answerSheet.answers}');
 
     score = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -56,22 +55,22 @@ class ColorDispositionCheckResult {
         }
       }
     }
-    print('score is ${score.toString()}');
     return score;
   }
 
   static Widget customListTile(int index, bool maxValue) {
-    return ListTile(
-        title: Text(
-          '${colorDiscomposeType[index]} : ${score[index]}',
-          style: TextStyle(
-            fontSize: maxValue ? 20 : 16,
-            color: maxValue ? Colors.red : null,
-            fontWeight: maxValue ? FontWeight.w500 : null,
-          ),
-          textAlign: TextAlign.center,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Text(
+        '${colorDiscomposeType[index]} : ${score[index]}',
+        style: TextStyle(
+          fontSize: maxValue ? 16 : 14,
+          color: maxValue ? Colors.red : null,
+          fontWeight: maxValue ? FontWeight.w500 : null,
         ),
-        dense: true);
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   static Widget buildWidget({
@@ -80,29 +79,27 @@ class ColorDispositionCheckResult {
     required String userName,
   }) {
     final maxValue = colorDispositionResult.reduce(max);
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
-      margin: const EdgeInsets.symmetric(vertical: 16.0),
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Card(
         elevation: 5,
         child: ListView.builder(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 8.0),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: colorDispositionResult.length,
+          itemCount: colorDispositionResult.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
               return ListTile(
                 title: Container(
-                  margin: const EdgeInsets.only(top: 32.0, bottom: 8.0),
+                  margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text(
-                    '$userName님의 Color Disposition 유형 진단 결과',
+                    '$userName님의 \nColor Disposition 유형 진단 결과',
                     style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                   ),
                 ),
               );

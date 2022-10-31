@@ -49,26 +49,26 @@ class EicDiagnosisResultModel {
 }
 
 class DispositionResultModel {
-  String type1;
-  String type2;
+  List<String> type1;
+  List<String> type2;
 
   DispositionResultModel({
     required this.type1,
     required this.type2,
   });
 
-  @override
-  String toString() {
-    return 'DispositionResultModel{type1: $type1, type2: $type2}';
-  }
-
   DispositionResultModel copyWith({
-    String? type1,
-    String? type2,
+    List<String>? type1,
+    List<String>? type2,
   }) {
     return DispositionResultModel(
       type1: type1 ?? this.type1,
       type2: type2 ?? this.type2,
     );
+  }
+
+  @override
+  String toString() {
+    return 'DispositionResultModel{type1: $type1, type2: $type2}';
   }
 }

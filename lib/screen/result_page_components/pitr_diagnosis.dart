@@ -39,15 +39,21 @@ class PITRCheckResult {
   }
 
   static Widget customListTile(int index) {
-    return ListTile(
-        title: Text(
-          '${pitrType[index]} 점수 : ${score[index]}',
-          style: const TextStyle(
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.center,
+    return Column(
+      children: [
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 2.0),
+            child: Text(
+              '${pitrType[index]} 점수 : ${score[index]}',
+              style: const TextStyle(
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
         ),
-        dense: true);
+        if(index == 2) const SizedBox(height: 16.0),
+      ],
+    );
   }
 
   static Widget buildWidget({
@@ -55,11 +61,8 @@ class PITRCheckResult {
     required BuildContext context,
     required String userName,
   }) {
-    // final maxValue = pitrResult.reduce(max);
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
-      margin: const EdgeInsets.symmetric(vertical: 16.0),
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Card(
         elevation: 5,
         child: ListView.builder(
@@ -71,14 +74,14 @@ class PITRCheckResult {
             if (index == 0) {
               return ListTile(
                 title: Container(
-                  margin: const EdgeInsets.only(top: 32.0, bottom: 8.0),
+                  margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text(
-                    '$userName님의 PITR 진단 결과',
+                    '$userName님의 \nPITR 진단 결과',
                     style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                   ),
                 ),
               );

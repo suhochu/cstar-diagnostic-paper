@@ -24,7 +24,7 @@ class ResultPage extends StatelessWidget {
   final List<EicDiagnosisResultModel> eicDiagnosisResult = [];
   final List<int> colorDispositionCheckResult = [];
   final List<int> pitrCheckResult = [];
-  final List<DispositionResultModel> disposition1Result = [];
+  DispositionResultModel? disposition1Result;
   late final UserModel userModel;
   late final ClassModel classModel;
 
@@ -95,8 +95,7 @@ class ResultPage extends StatelessWidget {
     }
 
     if (title == testsName[6]) {
-      disposition1Result.clear();
-      disposition1Result.addAll(DispositionDiagnosisResult.diagnosis(answerSheet, TYPE.type1));
+      disposition1Result = DispositionDiagnosisResult.diagnosis(answerSheet);
     }
   }
 
@@ -110,6 +109,7 @@ class ResultPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(height: 36),
               Row(),
               if (stressDiagnosisResult.isNotEmpty)
                 StressDiagnosisResult.buildWidget(
@@ -118,12 +118,14 @@ class ResultPage extends StatelessWidget {
                   userName: userModel.name,
                   score: StressDiagnosisResult.score,
                 ),
+              if (stressDiagnosisResult.isNotEmpty) const SizedBox(height: 16),
               if (selfEsteemScore != 0)
                 SelfEsteemResult.buildWidget(
                   context: context,
                   userName: userModel.name,
                   score: selfEsteemScore,
                 ),
+              if (selfEsteemScore != 0) const SizedBox(height: 16),
               if (selfLeaderShipResult.isNotEmpty)
                 SelfLeaderShipResult.buildWidget(
                   selfLeaderShipResult: selfLeaderShipResult,
@@ -131,6 +133,7 @@ class ResultPage extends StatelessWidget {
                   userName: userModel.name,
                   score: SelfLeaderShipResult.score,
                 ),
+              if (selfLeaderShipResult.isNotEmpty) const SizedBox(height: 8),
               if (eicDiagnosisResult.isNotEmpty)
                 EicTypeResult.buildWidget(
                   eicDiagnosisResult: eicDiagnosisResult,
@@ -138,32 +141,37 @@ class ResultPage extends StatelessWidget {
                   userName: userModel.name,
                   score: EicTypeResult.score,
                 ),
+              if (eicDiagnosisResult.isNotEmpty) const SizedBox(height: 8),
               if (colorDispositionCheckResult.isNotEmpty)
                 ColorDispositionCheckResult.buildWidget(
                   colorDispositionResult: colorDispositionCheckResult,
                   context: context,
                   userName: userModel.name,
                 ),
+              if (colorDispositionCheckResult.isNotEmpty) const SizedBox(height: 8),
               if (pitrCheckResult.isNotEmpty)
                 PITRCheckResult.buildWidget(
                   pitrResult: pitrCheckResult,
                   context: context,
                   userName: userModel.name,
                 ),
-              if (disposition1Result.isNotEmpty)
+              if (pitrCheckResult.isNotEmpty) const SizedBox(height: 8),
+              if (disposition1Result != null)
                 DispositionDiagnosisResult.buildWidget(
-                  dispositionResult: disposition1Result,
+                  dispositionResult: disposition1Result!,
                   context: context,
                   userName: userModel.name,
                 ),
+              if (disposition1Result != null) const SizedBox(height: 8),
               const SizedBox(height: 36),
               CustomSizedBox(
-                  child: CustomElevatedButton(
-                text: '테스트지 선택 화면으로 이동',
-                function: () {
-                  context.goNamed(TestSelectionPage.routeName);
-                },
-              )),
+                child: CustomElevatedButton(
+                  text: '테스트지 선택 화면으로 이동',
+                  function: () {
+                    context.goNamed(TestSelectionPage.routeName);
+                  },
+                ),
+              ),
               const SizedBox(height: 36),
             ],
           ),

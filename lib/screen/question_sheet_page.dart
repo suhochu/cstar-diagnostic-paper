@@ -140,6 +140,7 @@ class _StressResponseDiagnosisState extends ConsumerState<QuestionsSheetPage> {
     questionsData as QuestionsModel;
     final List<QuestionModel> questions = questionsData.questions;
     int questionLength = questions.length;
+    print('questionsLength is $questionLength');
     if (widget.title == 'Color Disposition Checklist') {
       questionLength = 20;
     }

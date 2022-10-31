@@ -30,10 +30,8 @@ class SelfEsteemResult {
     required String userName,
     required int score,
   }) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
-      margin: const EdgeInsets.symmetric(vertical: 16.0),
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Card(
         elevation: 5,
         child: ListView.builder(
@@ -44,21 +42,22 @@ class SelfEsteemResult {
           itemBuilder: (context, index) {
             if (index == 0) {
               return Container(
-                margin: const EdgeInsets.only(top: 32.0, bottom: 8.0),
+                margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  '$userName님의 자존감 진단 결과',
+                  '$userName님의 \n자존감 진단 결과',
                   style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                 ),
               );
             }
             return ListTile(
               title: Text(
                 '결과 : ${score.toString()}점',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               contentPadding: const EdgeInsets.all(16.0),

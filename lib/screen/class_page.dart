@@ -40,18 +40,27 @@ class _EnterPageState extends ConsumerState<ClassPage> {
     _controller.dispose();
   }
 
+
   void isAlreadyAuthorized() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final classInfo = prefs.getStringList('class');
+    final userInfo = prefs.getStringList('user');
+    final bool hasUserInfo = userInfo == null;
+
 
     //로컬에 이미 데이터가 있으면 로컬에서 가져오기
     if (classInfo != null) {
 
-      bool? isAlreadyAuthorized = await showDialog<bool>(
+       await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text(
+            title: hasUserInfo ?
+            const Text(
+              '이미 오늘의 코드를 인증 하셨습니다. User 정보 입력 페이지로 이동합니다.',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ) :
+            const Text(
                 '이미 오늘의 코드를 인증 하셨습니다. User 정보 입력 페이지 혹은 진단지 선택 페이지로 이동합니다.',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
             ),
@@ -68,7 +77,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
                   ),
                 ),
               ),
-              ElevatedButton(
+              if(!hasUserInfo) ElevatedButton(
                 style:
                 ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
                 onPressed: () => context.goNamed(TestSelectionPage.routeName),

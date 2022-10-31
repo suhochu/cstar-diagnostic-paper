@@ -144,7 +144,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
             builder: (context) {
               return AlertDialog(
                 title: Text(
-                  '$email을 사용하는 회원님이 이미 데이터 베이스에 존재합니다. \n데이터 베이스에서 불러올까요?',
+                  '$email을 사용하는 회원님이 이미 데이터 베이스에 존재합니다. 데이터 베이스에서 불러올까요?',
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 actions: [

@@ -39,7 +39,7 @@ class TestSelectionPage extends ConsumerWidget {
     return Scaffold(
       body: FutureBuilder(
         future: loadClassInfo(),
-        builder:  (context, snapshot) => Padding(
+        builder:  (context, snapshot) => snapshot.connectionState == ConnectionState.done ? Padding(
           padding: const EdgeInsets.all(20),
           child: ListView.builder(
             itemCount: tests.length + 1,
@@ -47,7 +47,7 @@ class TestSelectionPage extends ConsumerWidget {
               if(index == tests.length) {
                 return Column(
                   children: [
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 24),
                     CustomSizedBox(
                         child: CustomElevatedButton(
                           text: '결과 화면으로 이동',
@@ -58,8 +58,6 @@ class TestSelectionPage extends ConsumerWidget {
                   ],
                 );
               }
-
-
               return CustomContainer(
               title: tests[index],
               number: index + 1,
@@ -67,7 +65,7 @@ class TestSelectionPage extends ConsumerWidget {
             );
             },
           ),
-        ),
+        ) : Container(),
       ),
     );
   }

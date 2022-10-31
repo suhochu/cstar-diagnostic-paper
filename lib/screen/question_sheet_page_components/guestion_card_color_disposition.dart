@@ -136,7 +136,7 @@ class CustomCheckBox extends StatelessWidget {
       valueListenable: _isChecked,
       builder: (BuildContext context, bool value, Widget? child) {
         return SizedBox(
-          width: 200,
+          width: 250,
           child: CheckboxListTile(
             dense: true,
             controlAffinity: ListTileControlAffinity.leading,

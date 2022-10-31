@@ -11,26 +11,27 @@ class CustomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      width: MediaQuery.of(context).size.width * 0.8,
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white38,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(width: 2, color: Colors.redAccent),
-      ),
-      alignment: Alignment.center,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              context.pushNamed(QuestionsSheetPage.routeName,
-                  params: {'rid': title},
-                  );
-            },
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          context.pushNamed(
+            QuestionsSheetPage.routeName,
+            params: {'rid': title},
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 15),
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white38,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(width: 2, color: Colors.redAccent),
+          ),
+          alignment: Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 Text(

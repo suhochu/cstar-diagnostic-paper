@@ -42,11 +42,14 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
       groupValue: selectedValue,
       contentPadding: const EdgeInsets.only(left: 20),
       activeColor: Colors.redAccent,
-      title: Flexible(
-        child: Text(
-          content,
-          style: const TextStyle(fontSize: 14),
-        ),
+      title: Wrap(
+        direction: Axis.horizontal,
+        children: [
+          Text(
+            content,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ],
       ),
       onChanged: (value) {
         setState(() {
@@ -72,16 +75,20 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
                 children: [
                   Text(
                     'Q${widget.index}.',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500,),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
                   ),
                   Flexible(
-                    child: Text(
-                      widget.questions.question,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
+                    child:
+                      Text(
+                        widget.questions.question,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
                   )
                 ],
               ),

@@ -56,6 +56,5 @@ class AnswerListNotifier extends StateNotifier<AnswerSheetModel> {
     }
     answerMap[index] = answer;
     state = state.copyWith(answers: answerMap);
-    print('state.answers is${state.answers}');
   }
 }
