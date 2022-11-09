@@ -32,10 +32,13 @@ class UserNotifier extends StateNotifier<UserDataModel> {
   }
 
   Future<bool> isUserExist(String email) async {
-    final userFromRep = await repository.isDataExist(email);
-    if (userFromRep != null && userFromRep.isNotEmpty) {
-      return true;
+    if (email != '') {
+      final userFromRep = await repository.isDataExist(email);
+      if (userFromRep != null && userFromRep.isNotEmpty) {
+        return true;
+      }
     }
+
     return false;
   }
 
@@ -53,7 +56,7 @@ class UserNotifier extends StateNotifier<UserDataModel> {
     state = userModel;
   }
 
-  void errorOnSave(){
+  void errorOnSave() {
     state = UserModelError(error: '저장중에 문제가 발생했습니다. 재실행 부탁드립니다.');
   }
 }

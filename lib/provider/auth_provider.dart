@@ -1,6 +1,9 @@
 import 'package:cstarimage_testpage/model/class_model.dart';
+import 'package:cstarimage_testpage/model/classes_model.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
 import 'package:cstarimage_testpage/screen/class_page.dart';
+import 'package:cstarimage_testpage/screen/instructors_data_input_page.dart';
+import 'package:cstarimage_testpage/screen/instructors_data_read_page.dart';
 import 'package:cstarimage_testpage/screen/question_sheet_page.dart';
 import 'package:cstarimage_testpage/screen/result_page.dart';
 import 'package:cstarimage_testpage/screen/test_selection_page.dart';
@@ -19,7 +22,7 @@ class AuthProvider extends ChangeNotifier {
   AuthProvider({
     required this.ref,
   }) {
-    ref.listen<ClassDataModel>(classProvider, (previous, next) {
+    ref.listen<ClassesDataModel>(classProvider, (previous, next) {
       if (previous != null) {
         notifyListeners();
       }
@@ -56,11 +59,26 @@ class AuthProvider extends ChangeNotifier {
           name: ResultPage.routeName,
           builder: (_, state) => ResultPage(),
         ),
+
+        GoRoute(
+          path: '/${InstructorsDataReadPage.routeName}',
+          name: InstructorsDataReadPage.routeName,
+          builder: (_, __) => const InstructorsDataReadPage(),
+          routes: [
+            GoRoute(
+              path: InstructorsDataInputPage.routeName,
+              name: InstructorsDataInputPage.routeName,
+              builder: (_, state) => InstructorsDataInputPage(classModel: state.extra as ClassModel?),
+            ),
+          ]
+        ),
       ];
 
   Future<String?> redirectLogic(BuildContext context, GoRouterState state) async {
     final classPage = state.location == '/';
     final userPage = state.location == '/${UserPage.routeName}';
+    final instructorsReadPage = state.location == '/${InstructorsDataReadPage.routeName}';
+    final instructorsInputPage = state.location == '/${InstructorsDataReadPage.routeName}/${InstructorsDataInputPage.routeName}';
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print('============================');
@@ -71,19 +89,20 @@ class AuthProvider extends ChangeNotifier {
     print(prefs.getStringList('user').toString());
     print('============================');
 
-    if (!classPage) {
+    if (!classPage && !instructorsReadPage && !instructorsInputPage) {
       if (prefs.getStringList('class') == null) {
         print('not authorized');
         return '/';
       }
     }
 
-    if (!(classPage || userPage)) {
+    if (!(classPage || userPage) && !instructorsReadPage && !instructorsInputPage) {
       if (prefs.getStringList('user') == null) {
         print('not authorized && not have user');
         return '/${UserPage.routeName}';
       }
     }
+
     return null;
   }
 }

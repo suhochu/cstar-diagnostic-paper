@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cstarimage_testpage/utils/strings.dart';
 
 abstract class ClassDataModel {}
@@ -13,6 +15,7 @@ class ClassModelError extends ClassDataModel {
 class ClassModelLoading extends ClassDataModel {}
 
 class ClassModel extends ClassDataModel {
+  int no;
   String lectureCode;
   String testDate;
   List<String> accessibleTests;
@@ -20,6 +23,7 @@ class ClassModel extends ClassDataModel {
   String place;
 
   ClassModel({
+    required this.no,
     required this.lectureCode,
     required this.testDate,
     required this.accessibleTests,
@@ -29,6 +33,7 @@ class ClassModel extends ClassDataModel {
 
   factory ClassModel.initial() {
     return ClassModel(
+      no: -1,
       lectureCode: '',
       testDate: '',
       accessibleTests: [],
@@ -37,13 +42,16 @@ class ClassModel extends ClassDataModel {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, String> toMap() {
+    final stringAccessibleTests = accessibleTests.toString();
+    final tailoredAccessibleTests = stringAccessibleTests.substring(1, stringAccessibleTests.length - 1);
     return {
       'lectureCode': lectureCode,
       'testdate': "'${testDate.toString().split(' ')[0]}",
-      'accessibleTests': accessibleTests.toString(),
+      'accessibleTests': tailoredAccessibleTests,
       'classroom': classRoom,
       'place': place,
+      'no' : no.toString(),
     };
   }
 
@@ -54,6 +62,7 @@ class ClassModel extends ClassDataModel {
       accessibleTests: stringToList(map['accessibleTests']! ?? ''),
       classRoom: map['classroom'] as String,
       place: map['place'] as String,
+      no: jsonDecode(map['no']!),
     );
   }
 
@@ -65,6 +74,7 @@ class ClassModel extends ClassDataModel {
     String? place,
   }) {
     return ClassModel(
+      no: no,
       lectureCode: lectureCode ?? this.lectureCode,
       testDate: testDate ?? this.testDate,
       accessibleTests: accessibleTests ?? this.accessibleTests,
@@ -72,14 +82,16 @@ class ClassModel extends ClassDataModel {
       place: place ?? this.place,
     );
   }
-
+//todo List Number 수정
   factory ClassModel.fromList(List<String?> list) {
     return ClassModel(
+
       lectureCode: '',
       testDate: list[1] as String,
       accessibleTests: stringToList(list[2]! ?? '' ,subtract: true),
       classRoom: list[3] as String,
       place: list[4] as String,
+      no: int.parse(list[5]!),
     );
   }
 

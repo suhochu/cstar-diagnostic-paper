@@ -29,9 +29,19 @@ class _UserInputPageState extends ConsumerState<UserPage> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   Timer? _deBounce;
-
   String? _gender;
   String? _ages;
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   if (_deBounce != null) {
+  //     _deBounce!.cancel();
+  //   }
+  //   _nameController.dispose();
+  //   _companyController.dispose();
+  //   _emailController.dispose();
+  // }
 
   @override
   void initState() {
@@ -199,8 +209,8 @@ class _UserInputPageState extends ConsumerState<UserPage> {
       );
     }
 
-    return Scaffold(
-      body: Form(
+    return DefaultLayout(
+      child: Form(
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),

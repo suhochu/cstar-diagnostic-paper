@@ -24,6 +24,16 @@ class ClassRepository {
     }
   }
 
+  Future<List<Map<String, String>>?> getAllDate() async {
+    if (classInfoSheet == null) return null;
+    final row = await classInfoSheet!.values.map.allRows();
+    if (row != null) {
+      return row;
+    } else {
+      return null;
+    }
+  }
+
   Future<Map<String, String>?> getRowByDate(String date) async {
     if (classInfoSheet == null) return null;
     final row = await classInfoSheet!.values.map.rowByKey(date, fromColumn: 1);
@@ -32,5 +42,29 @@ class ClassRepository {
     } else {
       return null;
     }
+  }
+
+  Future<bool> insertRowByDate(int no, Map<String, String> map) async {
+    if (classInfoSheet == null) return false;
+    final result = await classInfoSheet!.values.map.insertRowByKey(no, map);
+    if (result == false) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+  Future<bool> insertRow({required Map<String, String> row}) async {
+    if (classInfoSheet == null) return false;
+    final result = await classInfoSheet?.values.map.appendRow(row);
+    if (result == null) return false;
+    return result;
+  }
+
+  Future<Map<String, String>?> getLastData() async {
+    if (classInfoSheet == null) return null;
+    final result = await classInfoSheet?.values.map.lastRow();
+    return result;
   }
 }

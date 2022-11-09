@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({
+  CustomTextField({
     Key? key,
     required this.controller,
     this.hint,
@@ -10,6 +10,8 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.maxLength = 20,
     this.onChanged,
+    this.obscureText = false,
+    this.autovalidateMode,
   }) : super(key: key);
   final TextEditingController controller;
   final String? label;
@@ -18,6 +20,8 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final int maxLength;
   final void Function(String)? onChanged;
+  final bool obscureText;
+  AutovalidateMode? autovalidateMode = AutovalidateMode.always;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,9 @@ class CustomTextField extends StatelessWidget {
       keyboardType: keyboardType,
       validator: validator,
       onChanged: onChanged,
+      obscureText: obscureText,
+      autovalidateMode: autovalidateMode,
+
     );
   }
 }

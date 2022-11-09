@@ -1,8 +1,9 @@
 List<String> stringToList(String string, {bool subtract = false}) {
+  String returnedString = string;
   if (subtract) {
-    string = string.substring(1, string.length - 1);
+    returnedString = string.substring(1, string.length - 1);
   }
-  return string.split(',').map((string) => string.trim()).toList();
+  return returnedString.split(',').map((string) => string.trim()).toList();
 }
 
 String getYearMonthDate(DateTime dateTime) {
@@ -20,3 +21,4 @@ String? validateEmail(String? value) {
     return null;
   }
 }
+
