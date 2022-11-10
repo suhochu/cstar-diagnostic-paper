@@ -210,6 +210,16 @@ class _InstructorsPageState extends ConsumerState<InstructorsDataInputPage> {
     );
   }
 
+  void lectureCodeDuplicated(ClassModel classModel) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Text(
+            '${classModel.testDate} 자 ${classModel.place} 강의 정보의 Lecture Code 가 중복 되었습니다. 중복 되지 않게 Lecture Code 를 지정해 주세요'),
+      ),
+    );
+  }
+
   void pop() {
     context.pop();
   }
@@ -348,16 +358,22 @@ class _InstructorsPageState extends ConsumerState<InstructorsDataInputPage> {
                           classRoom: _classRoomController.text,
                           place: _companyController.text,
                         );
-                        bool result = false;
-                        if (isUpdate) {
-                          result = await ref.read(classProvider.notifier).insertClassByDate(classModel);
-                          pop();
+                        bool isLectureCodeDuplicated =
+                            await ref.read(classProvider.notifier).checkLectureCodeDuplicated(classModel);
+                        if (!isLectureCodeDuplicated) {
+                          bool result = false;
+                          if (isUpdate) {
+                            result = await ref.read(classProvider.notifier).insertClassByDate(classModel);
+                            pop();
+                          } else {
+                            result = await ref.read(classProvider.notifier).addRow(classModel);
+                          }
+                          if (result) {
+                            showSuccessDialog(classModel);
+                            clearTextField();
+                          }
                         } else {
-                          result = await ref.read(classProvider.notifier).addRow(classModel);
-                        }
-                        if (result) {
-                          showSuccessDialog(classModel);
-                          clearTextField();
+                          lectureCodeDuplicated(classModel);
                         }
                       }
                     },

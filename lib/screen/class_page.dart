@@ -4,7 +4,6 @@ import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/model/classes_model.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
 import 'package:cstarimage_testpage/screen/instructors_data_read_page.dart';
-import 'package:cstarimage_testpage/screen/test_selection_page.dart';
 import 'package:cstarimage_testpage/screen/user_page.dart';
 import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
@@ -31,7 +30,6 @@ class _EnterPageState extends ConsumerState<ClassPage> {
   @override
   void initState() {
     super.initState();
-    isAlreadyAuthorized();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       init();
     });
@@ -43,60 +41,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
     _controller.dispose();
   }
 
-  void isAlreadyAuthorized() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final classInfo = prefs.getStringList('class');
-    final userInfo = prefs.getStringList('user');
-
-    //로컬에 이미 데이터가 있으면 로컬에서 가져오기
-    if (classInfo != null) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: userInfo == null
-                ? const Text(
-                    '이미 오늘의 코드를 인증 하셨습니다. User 정보 입력 페이지로 이동합니다.',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                  )
-                : const Text(
-                    '이미 오늘의 코드를 인증 하셨습니다. User 정보 입력 페이지 혹은 진단지 선택 페이지로 이동합니다.',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                  ),
-            actions: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
-                onPressed: () => context.goNamed(UserPage.routeName),
-                child: const Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text(
-                    'User 정보 입력',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
-                  ),
-                ),
-              ),
-              if (userInfo != null)
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
-                  onPressed: () => context.goNamed(TestSelectionPage.routeName),
-                  child: const Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      '진단지 선택',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
   Future<void> init() async {
-    await ref.read(classProvider.notifier).classWorkSheetInit();
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final classInfo = prefs.getStringList('class');
 
@@ -105,13 +50,59 @@ class _EnterPageState extends ConsumerState<ClassPage> {
       print('=======================');
       print('classInfo from Gsheet');
       print('=======================');
+      await ref.read(classProvider.notifier).classWorkSheetInit();
       await ref.read(classProvider.notifier).getTodayClassData(DateTime.now());
     } else {
       print('=======================');
       print('classInfo from Local');
       print('=======================');
-      ref.read(classProvider.notifier).getTodayClassFromDevice(classInfo);
+      getDataFromLocal(classInfo);
     }
+  }
+
+  void getDataFromLocal(List<String>? classInfo) async {
+    bool result = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            '이미 ${classInfo![1]} 일자 ${classInfo[4]} 의 강의 코드를 인증 하셨습니다. 다른 강의 코드를 입력하시겠습니까?',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+              onPressed: () => Navigator.pop(context, true),
+              child: const Padding(
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  '예',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+              onPressed: () => Navigator.pop(context, false),
+              child: const Padding(
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  '아니요',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    if (!result) {
+      goToUserPage();
+    }
+  }
+
+  void goToUserPage() {
+    context.goNamed(UserPage.routeName);
   }
 
   void saveClassInfo(ClassModel classInfo) async {
@@ -120,6 +111,30 @@ class _EnterPageState extends ConsumerState<ClassPage> {
       prefs.setStringList('class', classInfo.propertiesToList());
     } catch (e) {
       ref.read(classProvider.notifier).errorOnSave();
+    }
+  }
+
+  void checkLectureCode(ClassesModel classesData) {
+    bool lectureCodeValidated = false;
+    for (var classData in classesData.classData) {
+      if (_controller.text == classData.lectureCode) {
+        lectureCodeValidated = true;
+        saveClassInfo(classData);
+        goToUserPage();
+      }
+    }
+
+    if (!lectureCodeValidated) {
+      _controller.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            '교육 코드가 틀렸습니다. 다시 입력해 주세요',
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
 
@@ -150,19 +165,38 @@ class _EnterPageState extends ConsumerState<ClassPage> {
 
     if (classData is ClassesModelError) {
       return DefaultLayout(
-        child: Center(
-          child: Text(
-            classData.error,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(),
+              const SizedBox(height: 24),
+              CustomSizedBox(
+                child: CustomTextField(
+                  hint: classData.error,
+                  controller: _controller,
+                ),
+              ),
+              const SizedBox(height: 36),
+              CustomSizedBox(
+                child: CustomElevatedButton(
+                  text: '제출하기',
+                  function: () {
+                    if (_controller.text == adminPassword) {
+                      context.goNamed(InstructorsDataReadPage.routeName);
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       );
     }
 
-
+    classData as ClassesModel;
     return DefaultLayout(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
@@ -196,21 +230,8 @@ class _EnterPageState extends ConsumerState<ClassPage> {
                     context.goNamed(InstructorsDataReadPage.routeName);
                   } else {
                     final valid = _formKey.currentState!.validate();
-                    if ((classData is ClassesModel) && (classData.classData[0].lectureCode == _controller.text) && valid) {
-                      saveClassInfo(classData.classData[0]);
-                      context.goNamed(UserPage.routeName);
-                    }
-                    if ((classData is ClassesModel) && (classData.classData[0].lectureCode != _controller.text) && valid) {
-                      _controller.clear();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            '교육 코드가 틀렸습니다. 다시 입력해 주세요',
-                            textAlign: TextAlign.center,
-                          ),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
+                    if (valid) {
+                      checkLectureCode(classData);
                     }
                   }
                 },
@@ -221,4 +242,6 @@ class _EnterPageState extends ConsumerState<ClassPage> {
       ),
     );
   }
+
+
 }

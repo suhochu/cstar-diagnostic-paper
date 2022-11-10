@@ -31,21 +31,15 @@ class ClassNotifier extends StateNotifier<ClassesDataModel> {
     }
     final classesModel = classesData.map((classData) => ClassModel.fromMap(classData)).toList();
     final todayClasses = classesModel.where((classData) => classData.testDate == today).toList();
-    if (classesModel.isEmpty) {
+    if (todayClasses.isEmpty) {
       state = ClassesModelError(error: '오늘 날짜의 강의가 없습니다.');
       return;
     }
     state = ClassesModel(classData: todayClasses);
   }
 
-  void getTodayClassFromDevice(List<String> classInfo) {
-    // state = ClassModelLoading();
-    // ClassModel classModel = ClassModel.fromList(classInfo);
-    // state = classModel;
-  }
-
   void errorOnSave() {
-    // state = ClassModelError(error: '저장중에 문제가 발생했습니다. 재실행 부탁드립니다.');
+    state = ClassesModelError(error: '저장중에 문제가 발생했습니다. 재실행 부탁드립니다.');
   }
 
   Future<bool> addRow(ClassModel classModel) async {
@@ -69,5 +63,21 @@ class ClassNotifier extends StateNotifier<ClassesDataModel> {
       return classModel.no;
     }
     return -1;
+  }
+
+  Future<bool> checkLectureCodeDuplicated(ClassModel classModel) async {
+    final List<Map<String, String>>? classesData = await repository.getAllDate();
+    if (classesData == null) {
+      return true;
+    }
+    final classesModel = classesData.map((classData) => ClassModel.fromMap(classData)).toList();
+    final todayClasses = classesModel
+        .where((classData) =>
+            (classData.testDate == classModel.testDate) && (classData.lectureCode == classModel.lectureCode))
+        .toList();
+    if (todayClasses.isEmpty) {
+      return false;
+    }
+    return true;
   }
 }

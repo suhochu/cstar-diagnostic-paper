@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/user_model.dart';
+import 'package:cstarimage_testpage/provider/class_provider1.dart';
 import 'package:cstarimage_testpage/provider/user_provider.dart';
 import 'package:cstarimage_testpage/screen/test_selection_page.dart';
 import 'package:cstarimage_testpage/utils/strings.dart';
@@ -32,17 +33,6 @@ class _UserInputPageState extends ConsumerState<UserPage> {
   String? _gender;
   String? _ages;
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   if (_deBounce != null) {
-  //     _deBounce!.cancel();
-  //   }
-  //   _nameController.dispose();
-  //   _companyController.dispose();
-  //   _emailController.dispose();
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -53,6 +43,35 @@ class _UserInputPageState extends ConsumerState<UserPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       init();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (_deBounce != null) {
+      _deBounce!.cancel();
+    }
+    _nameController.dispose();
+    _companyController.dispose();
+    _emailController.dispose();
+  }
+
+  Future<AppBar?> initializeAppbar() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final classInfo = prefs.getStringList('class');
+    if (classInfo == null) return null;
+    return AppBar(
+      title: Text(
+        '${classInfo[1]} 일자 ${classInfo[4]} 에서의 강의에 참여해 주셔서 감사합니다.',
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        overflow: TextOverflow.ellipsis,
+      ),
+      centerTitle: true,
+      backgroundColor: Colors.redAccent,
+    );
   }
 
   Future<void> isUserExistInLocal() async {
@@ -210,6 +229,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
     }
 
     return DefaultLayout(
+      appbar: initializeAppbar(),
       child: Form(
         key: _formKey,
         child: Padding(
