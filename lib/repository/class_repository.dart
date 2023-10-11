@@ -54,7 +54,6 @@ class ClassRepository {
     }
   }
 
-
   Future<bool> insertRow({required Map<String, String> row}) async {
     if (classInfoSheet == null) return false;
     final result = await classInfoSheet?.values.map.appendRow(row);

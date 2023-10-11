@@ -72,8 +72,7 @@ class ClassNotifier extends StateNotifier<ClassesDataModel> {
     }
     final classesModel = classesData.map((classData) => ClassModel.fromMap(classData)).toList();
     final todayClasses = classesModel
-        .where((classData) =>
-            (classData.testDate == classModel.testDate) && (classData.lectureCode == classModel.lectureCode))
+        .where((classData) => (classData.testDate == classModel.testDate) && (classData.lectureCode == classModel.lectureCode))
         .toList();
     if (todayClasses.isEmpty) {
       return false;

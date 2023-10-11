@@ -1,47 +1,33 @@
-import 'dart:math';
-
-import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
-class StressDiagnosisResult {
-  static List<String> stressType = ['행동-공격형', '공유-비난형', '자책-자해형', '고립-은둔형'];
+import '../../model/answer_sheet_model.dart';
 
-  static List<int> score = [0, 0, 0, 0];
+class PersonalColorDiagnosisResult {
+  static List<int> score = [0, 0, 0];
+  static List<String> personalColorType = ['웜톤', '중성', '쿨톤'];
 
-  static List<StressDiagnosisResultModel> diagnosis(AnswerSheetModel answerSheet) {
-    final List<String?> answers = answerSheet.answers;
-    final List<StressDiagnosisResultModel> resultType = [];
-    score = [0, 0, 0, 0];
-
-    for (var i in answers) {
-      if (i == 'A') {
-        score[0] += 1;
-      } else if (i == 'B') {
-        score[1] += 1;
-      } else if (i == 'C') {
-        score[2] += 1;
-      } else if (i == 'D') {
-        score[3] += 1;
+  static List<int> diagnosis(AnswerSheetModel answerSheet) {
+    List<String?> answers = answerSheet.answers;
+    List<int> localScore = [0, 0, 0];
+    for (int i = 0; i < answers.length; i++) {
+      if (answers[i] == 'A') {
+        localScore[0] += 1;
+      } else if (answers[i] == 'B') {
+        localScore[1] += 1;
+      } else if (answers[i] == 'C') {
+        localScore[2] += 1;
       } else {
         print('nothing have!!');
       }
     }
-
-    final int maxValue = score.reduce(max);
-    for (int i = 0; i < 4; i++) {
-      if (score[i] == maxValue) {
-        resultType.add(StressDiagnosisResultModel(type: stressType[i]));
-      }
-    }
-
-    return resultType;
+    return localScore;
   }
 
-  static Widget customListTile(int index) {
+  static Widget customListTile(int index, int score) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2.0),
       child: Text(
-        '${stressType[index]} : ${score[index]}',
+        '${personalColorType[index]} : $score',
         style: const TextStyle(fontSize: 14),
         textAlign: TextAlign.center,
       ),
@@ -49,7 +35,6 @@ class StressDiagnosisResult {
   }
 
   static Widget buildWidget({
-    required List<StressDiagnosisResultModel> stressDiagnosisResult,
     required BuildContext context,
     required String userName,
     required List<int> score,
@@ -62,14 +47,14 @@ class StressDiagnosisResult {
           padding: const EdgeInsets.all(8.0),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: stressDiagnosisResult.length + 1,
+          itemCount: 2,
           itemBuilder: (context, index) {
             if (index == 0) {
               return ExpansionTile(
                 title: Container(
                   margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text(
-                    '$userName님의 \n스트레스 유형 진단 결과',
+                    '$userName님의 \v퍼스털 컬러 셀프 진단 결과',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -84,22 +69,28 @@ class StressDiagnosisResult {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                   ),
                   const SizedBox(height: 8.0),
-                  customListTile(0),
-                  customListTile(1),
-                  customListTile(2),
-                  customListTile(3),
+                  customListTile(0, score[0]),
+                  customListTile(1, score[1]),
+                  customListTile(2, score[2]),
                   const SizedBox(height: 16.0),
                 ],
               );
             }
-
+            final int maxValue = score.reduce((current, next) => current > next ? current : next);
+            final List<String> myTypeString = [];
+            for (int i = 0; i <= 2; i++) {
+              if (score[i] == maxValue) {
+                myTypeString.add(personalColorType[i]);
+              }
+            }
+            final String resultString = myTypeString.join(' / ');
             return ListTile(
               title: Text(
-                '결과 : ${stressDiagnosisResult[index - 1].type}',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                resultString,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              contentPadding: const EdgeInsets.all(8.0),
+              contentPadding: const EdgeInsets.all(16.0),
             );
           },
         ),

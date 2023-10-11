@@ -1,15 +1,15 @@
 import 'dart:async';
+
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/user_model.dart';
-import 'package:cstarimage_testpage/provider/class_provider1.dart';
 import 'package:cstarimage_testpage/provider/user_provider.dart';
 import 'package:cstarimage_testpage/screen/test_selection_page.dart';
 import 'package:cstarimage_testpage/utils/strings.dart';
-import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:cstarimage_testpage/widgets/buttons.dart';
 import 'package:cstarimage_testpage/widgets/custom_drop_down_button.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
+import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -95,8 +95,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                 ),
                 actions: [
                   ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
                     onPressed: () => Navigator.pop(context, true),
                     child: const Padding(
                       padding: EdgeInsets.all(5),
@@ -107,8 +106,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                     ),
                   ),
                   ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
                     onPressed: () => Navigator.pop(context, false),
                     child: const Padding(
                       padding: EdgeInsets.all(5),
@@ -178,8 +176,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                 ),
                 actions: [
                   ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
                     onPressed: () => Navigator.pop(context, true),
                     child: const Padding(
                       padding: EdgeInsets.all(5),
@@ -190,8 +187,7 @@ class _UserInputPageState extends ConsumerState<UserPage> {
                     ),
                   ),
                   ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, padding: const EdgeInsets.all(10)),
                     onPressed: () => Navigator.pop(context, false),
                     child: const Padding(
                       padding: EdgeInsets.all(5),

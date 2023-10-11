@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ColorDispositionSubtitleComponents {
-  static Widget subtitle = Column(
+  static Widget subtitle = const Column(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: const [
+    children: [
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Text(

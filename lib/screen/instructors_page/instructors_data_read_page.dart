@@ -1,7 +1,7 @@
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/classes_model.dart';
 import 'package:cstarimage_testpage/provider/class_editing_provider.dart';
-import 'package:cstarimage_testpage/screen/instructors_data_input_page.dart';
+import 'package:cstarimage_testpage/screen/instructors_page/instructors_data_input_page.dart';
 import 'package:cstarimage_testpage/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -117,9 +117,6 @@ class _InstructorsDataReadPageState extends ConsumerState<InstructorsDataReadPag
               );
             }
 
-
-
-
             final isPast = compareFromToday(classesData.classData[index].testDate);
             Color color = selectColor(isPast);
             return Card(
@@ -172,7 +169,7 @@ class _InstructorsDataReadPageState extends ConsumerState<InstructorsDataReadPag
                     ),
                     Text(
                       '진단지 유형 : ${accessibleTests.substring(1, accessibleTests.length - 1)}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: isPast == -1 ? null :  Colors.teal),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: isPast == -1 ? null : Colors.teal),
                     )
                   ],
                 ),

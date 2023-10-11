@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
@@ -9,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:collection/collection.dart';
+
+import '../../constants/data_contants.dart';
 
 class InstructorsDataInputPage extends ConsumerStatefulWidget {
   static String get routeName => 'InstructorsDataInputPage';
@@ -23,15 +25,17 @@ class InstructorsDataInputPage extends ConsumerStatefulWidget {
 
 class _InstructorsPageState extends ConsumerState<InstructorsDataInputPage> {
   final _formKey = GlobalKey<FormState>();
-  static final List<String> _lectureName = [
-    '스트레스 진단',
-    '자존감 진단',
-    '리더십 유형',
-    'EIC 이미지 셀프 진단',
-    'Color Disposition Checklist',
-    'PITR',
-    'disposition Test',
-  ];
+
+  // static final List<String> _lectureName = [
+  //   '스트레스 진단',
+  //   '자존감 진단',
+  //   '리더십 유형',
+  //   'EIC 이미지 셀프 진단',
+  //   'Color Disposition Checklist',
+  //   'PITR',
+  //   'disposition Test',
+  //   'personal color self'
+  // ];
   static final List<Color> _colors = [
     Colors.brown,
     Colors.blueGrey,
@@ -39,10 +43,11 @@ class _InstructorsPageState extends ConsumerState<InstructorsDataInputPage> {
     Colors.orange,
     Colors.indigo,
     Colors.lime,
-    Colors.teal
+    Colors.teal,
+    Colors.purpleAccent
   ];
 
-  final _items = _lectureName.map((lecture) => MultiSelectItem<String>(lecture, lecture)).toList();
+  final _items = testsName.map((lecture) => MultiSelectItem<String>(lecture, lecture)).toList();
 
   final List<String> _selected = [];
   final List<Widget> _chipSelected = [];
@@ -214,8 +219,7 @@ class _InstructorsPageState extends ConsumerState<InstructorsDataInputPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 2),
-        content: Text(
-            '${classModel.testDate} 자 ${classModel.place} 강의 정보의 Lecture Code 가 중복 되었습니다. 중복 되지 않게 Lecture Code 를 지정해 주세요'),
+        content: Text('${classModel.testDate} 자 ${classModel.place} 강의 정보의 Lecture Code 가 중복 되었습니다. 중복 되지 않게 Lecture Code 를 지정해 주세요'),
       ),
     );
   }
@@ -349,17 +353,14 @@ class _InstructorsPageState extends ConsumerState<InstructorsDataInputPage> {
                       bool valid = _formKey.currentState!.validate();
                       if (valid) {
                         final classModel = ClassModel(
-                          no: isUpdate
-                              ? widget.classModel?.no ?? -1
-                              : await ref.read(classProvider.notifier).getLastClassIndex() + 1,
+                          no: isUpdate ? widget.classModel?.no ?? -1 : await ref.read(classProvider.notifier).getLastClassIndex() + 1,
                           lectureCode: _lectureCodeController.text,
                           testDate: _dateDateController.text,
                           accessibleTests: _selected,
                           classRoom: _classRoomController.text,
                           place: _companyController.text,
                         );
-                        bool isLectureCodeDuplicated =
-                            await ref.read(classProvider.notifier).checkLectureCodeDuplicated(classModel);
+                        bool isLectureCodeDuplicated = await ref.read(classProvider.notifier).checkLectureCodeDuplicated(classModel);
                         if (!isLectureCodeDuplicated) {
                           bool result = false;
                           if (isUpdate) {

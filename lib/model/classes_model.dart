@@ -19,8 +19,7 @@ class ClassesModel extends ClassesDataModel {
     required this.classData,
   });
 
-  factory ClassesModel.initial(){
+  factory ClassesModel.initial() {
     return ClassesModel(classData: []);
   }
-
 }

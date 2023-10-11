@@ -1,5 +1,4 @@
 class GoogleSheetInfo {
-
   static const String spreadsheetId = '1w6iDraxIGDBHOCGXaIIiu7aGh9M_vr0qpLjtr3nAL_E';
   static const String classSheet = 'class_information';
   static const String userSheet = 'cstar_user';
@@ -11,5 +10,5 @@ class GoogleSheetInfo {
   static const String colorDispositionChecklist = 'color_disposition';
   static const String pitr = 'PITR';
   static const String dispositionTest1 = 'disposition_test';
-
+  static const String personalColorSelf = 'personal_color_self';
 }

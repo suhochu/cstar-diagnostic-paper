@@ -41,9 +41,7 @@ class _PitrCardState extends ConsumerState<PitrCard> {
         elevation: 5,
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-        child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-            child: questionTitleWidget(widget.index)),
+        child: Padding(padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), child: questionTitleWidget(widget.index)),
       ),
     );
   }

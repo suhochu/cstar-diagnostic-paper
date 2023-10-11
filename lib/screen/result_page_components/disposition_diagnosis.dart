@@ -94,7 +94,7 @@ class DispositionDiagnosisResult {
                 title: Container(
                   margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text(
-                    '$userName님의 \n성향 진단 결과',
+                    '$userName님의 \nDisposition 성향 진단 결과',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,

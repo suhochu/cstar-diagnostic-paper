@@ -42,16 +42,16 @@ class PITRCheckResult {
     return Column(
       children: [
         Container(
-            margin: const EdgeInsets.symmetric(vertical: 2.0),
-            child: Text(
-              '${pitrType[index]} 점수 : ${score[index]}',
-              style: const TextStyle(
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
+          margin: const EdgeInsets.symmetric(vertical: 2.0),
+          child: Text(
+            '${pitrType[index]} 점수 : ${score[index]}',
+            style: const TextStyle(
+              fontSize: 14,
             ),
+            textAlign: TextAlign.center,
+          ),
         ),
-        if(index == 2) const SizedBox(height: 16.0),
+        if (index == 2) const SizedBox(height: 16.0),
       ],
     );
   }

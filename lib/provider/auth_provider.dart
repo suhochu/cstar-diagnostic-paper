@@ -2,8 +2,8 @@ import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/model/classes_model.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
 import 'package:cstarimage_testpage/screen/class_page.dart';
-import 'package:cstarimage_testpage/screen/instructors_data_input_page.dart';
-import 'package:cstarimage_testpage/screen/instructors_data_read_page.dart';
+import 'package:cstarimage_testpage/screen/instructors_page/instructors_data_input_page.dart';
+import 'package:cstarimage_testpage/screen/instructors_page/instructors_data_read_page.dart';
 import 'package:cstarimage_testpage/screen/question_sheet_page.dart';
 import 'package:cstarimage_testpage/screen/result_page.dart';
 import 'package:cstarimage_testpage/screen/test_selection_page.dart';
@@ -48,8 +48,8 @@ class AuthProvider extends ChangeNotifier {
             GoRoute(
               path: '${QuestionsSheetPage.routeName}/:rid',
               name: QuestionsSheetPage.routeName,
-              builder: (_, state) => QuestionsSheetPage(
-                title: state.params['rid']!,
+              builder: (_, GoRouterState state) => QuestionsSheetPage(
+                title: state.pathParameters['rid']!,
               ),
             ),
           ],
@@ -59,26 +59,24 @@ class AuthProvider extends ChangeNotifier {
           name: ResultPage.routeName,
           builder: (_, state) => ResultPage(),
         ),
-
         GoRoute(
-          path: '/${InstructorsDataReadPage.routeName}',
-          name: InstructorsDataReadPage.routeName,
-          builder: (_, __) => const InstructorsDataReadPage(),
-          routes: [
-            GoRoute(
-              path: InstructorsDataInputPage.routeName,
-              name: InstructorsDataInputPage.routeName,
-              builder: (_, state) => InstructorsDataInputPage(classModel: state.extra as ClassModel?),
-            ),
-          ]
-        ),
+            path: '/${InstructorsDataReadPage.routeName}',
+            name: InstructorsDataReadPage.routeName,
+            builder: (_, __) => const InstructorsDataReadPage(),
+            routes: [
+              GoRoute(
+                path: InstructorsDataInputPage.routeName,
+                name: InstructorsDataInputPage.routeName,
+                builder: (_, state) => InstructorsDataInputPage(classModel: state.extra as ClassModel?),
+              ),
+            ]),
       ];
 
   Future<String?> redirectLogic(BuildContext context, GoRouterState state) async {
-    final classPage = state.location == '/';
-    final userPage = state.location == '/${UserPage.routeName}';
-    final instructorsReadPage = state.location == '/${InstructorsDataReadPage.routeName}';
-    final instructorsInputPage = state.location == '/${InstructorsDataReadPage.routeName}/${InstructorsDataInputPage.routeName}';
+    final classPage = state.fullPath == '/';
+    final userPage = state.fullPath == '/${UserPage.routeName}';
+    final instructorsReadPage = state.fullPath == '/${InstructorsDataReadPage.routeName}';
+    final instructorsInputPage = state.fullPath == '/${InstructorsDataReadPage.routeName}/${InstructorsDataInputPage.routeName}';
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print('============================');

@@ -60,12 +60,12 @@ class EicTypeResult {
   static Widget customListTile(int index) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2.0),
-        child: Text(
-          '${eicType[index]} : ${score[index]}',
-          style: const TextStyle(fontSize: 14),
-          textAlign: TextAlign.center,
-        ),
-        );
+      child: Text(
+        '${eicType[index]} : ${score[index]}',
+        style: const TextStyle(fontSize: 14),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   static Widget buildWidget({

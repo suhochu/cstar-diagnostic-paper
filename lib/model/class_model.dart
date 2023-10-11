@@ -51,7 +51,7 @@ class ClassModel extends ClassDataModel {
       'accessibleTests': tailoredAccessibleTests,
       'classroom': classRoom,
       'place': place,
-      'no' : no.toString(),
+      'no': no.toString(),
     };
   }
 
@@ -82,17 +82,16 @@ class ClassModel extends ClassDataModel {
       place: place ?? this.place,
     );
   }
+
 //todo List Number 수정
   factory ClassModel.fromList(List<String?> list) {
     return ClassModel(
-
-      lectureCode: '',
-      testDate: list[1] as String,
-      accessibleTests: stringToList(list[2]! ?? '' ,subtract: true),
-      classRoom: list[3] as String,
-      place: list[4] as String,
-      no: int.parse(list[5]!),
-    );
+        lectureCode: '',
+        testDate: list[1] as String,
+        accessibleTests: stringToList(list[2]! ?? '', subtract: true),
+        classRoom: list[3] as String,
+        place: list[4] as String,
+        no: -1);
   }
 
   List<String> propertiesToList() {

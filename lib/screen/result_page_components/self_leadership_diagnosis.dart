@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
@@ -74,15 +75,15 @@ class SelfLeaderShipResult {
     return indexAtMaxValue;
   }
 
-  static Widget customListTile(int index){
+  static Widget customListTile(int index) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2.0),
-        child: Text(
-          '${leaderShipType[index]} : ${score[index]}',
-          style: const TextStyle(fontSize: 14),
-          textAlign: TextAlign.center,
-        ),
-        );
+      child: Text(
+        '${leaderShipType[index]} : ${score[index]}',
+        style: const TextStyle(fontSize: 14),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   static Widget buildWidget({

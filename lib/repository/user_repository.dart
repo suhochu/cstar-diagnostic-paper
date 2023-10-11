@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gsheets/gsheets.dart';
 
 final userRepositoryProvider = Provider<UserRepository>(
-      (ref) => UserRepository(gSheets: ref.read(googleSheetRepository)),
+  (ref) => UserRepository(gSheets: ref.read(googleSheetRepository)),
 );
 
 class UserRepository {
@@ -25,14 +25,14 @@ class UserRepository {
   }
 
   Future<Map<String, String>?> isDataExist(String userEmail) async {
-    if(userInfoSheet == null) return null;
-    final data = await userInfoSheet!.values.map.rowByKey(userEmail,fromColumn: 1);
-    if(data != null && data.isNotEmpty) return data;
+    if (userInfoSheet == null) return null;
+    final data = await userInfoSheet!.values.map.rowByKey(userEmail, fromColumn: 1);
+    if (data != null && data.isNotEmpty) return data;
     return null;
   }
 
   Future<bool> addRow(Map<String, String> user) async {
-    if(userInfoSheet == null) return false;
+    if (userInfoSheet == null) return false;
     final result = await userInfoSheet!.values.map.appendRow(user);
     return result;
   }

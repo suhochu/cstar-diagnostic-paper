@@ -1,12 +1,12 @@
-import 'package:cstarimage_testpage/constants/creidentials.dart';
+import 'package:cstarimage_testpage/constants/credential.dart';
 import 'package:cstarimage_testpage/layout/default_layout.dart';
 import 'package:cstarimage_testpage/model/class_model.dart';
 import 'package:cstarimage_testpage/model/classes_model.dart';
 import 'package:cstarimage_testpage/provider/class_provider.dart';
-import 'package:cstarimage_testpage/screen/instructors_data_read_page.dart';
+import 'package:cstarimage_testpage/screen/instructors_page/instructors_data_read_page.dart';
 import 'package:cstarimage_testpage/screen/user_page.dart';
-import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
+import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -184,7 +184,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
                 child: CustomElevatedButton(
                   text: '제출하기',
                   function: () {
-                    if (_controller.text == adminPassword) {
+                    if (_controller.text == CstarDiagGsheetAPIConfig.adminPassword) {
                       context.goNamed(InstructorsDataReadPage.routeName);
                     }
                   },
@@ -226,7 +226,7 @@ class _EnterPageState extends ConsumerState<ClassPage> {
               child: CustomElevatedButton(
                 text: '제출하기',
                 function: () {
-                  if (_controller.text == adminPassword) {
+                  if (_controller.text == CstarDiagGsheetAPIConfig.adminPassword) {
                     context.goNamed(InstructorsDataReadPage.routeName);
                   } else {
                     final valid = _formKey.currentState!.validate();
@@ -242,6 +242,4 @@ class _EnterPageState extends ConsumerState<ClassPage> {
       ),
     );
   }
-
-
 }

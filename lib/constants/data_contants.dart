@@ -1,27 +1,26 @@
 enum Selections { A, B, C, D, E, F }
 
 Selections? stringToSelections(String string) {
-  if(string == 'A'){
+  if (string == 'A') {
     return Selections.A;
   }
-  if(string == 'B'){
+  if (string == 'B') {
     return Selections.B;
   }
-  if(string == 'C'){
+  if (string == 'C') {
     return Selections.C;
   }
-  if(string == 'D'){
+  if (string == 'D') {
     return Selections.D;
   }
-  if(string == 'E'){
+  if (string == 'E') {
     return Selections.E;
   }
-  if(string == 'F'){
+  if (string == 'F') {
     return Selections.F;
   }
   return null;
 }
-
 
 final List<String> genderItems = [
   '남자',
@@ -44,8 +43,7 @@ final List<String> agesItems = [
   '70이상'
 ];
 
-
-List<String?> initialAnswerSheet (int length) {
+List<String?> initialAnswerSheet(int length) {
   return List.generate(length, (index) => null);
 }
 
@@ -57,4 +55,5 @@ const List<String> testsName = [
   'Color Disposition Checklist',
   'PITR',
   'disposition Test',
+  'personal color self'
 ];

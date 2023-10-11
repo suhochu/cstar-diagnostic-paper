@@ -29,7 +29,7 @@ class CustomDropDownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField2<String?>(
+    return DropdownButtonFormField2<String>(
       value: value,
       decoration: textFieldInputDecoration(),
       isExpanded: false,
@@ -38,16 +38,6 @@ class CustomDropDownButton extends StatelessWidget {
         style: TextStyle(fontSize: hintSize, color: Colors.redAccent),
       ),
       isDense: true,
-      icon: const Icon(
-        Icons.arrow_drop_down,
-        color: Colors.black45,
-      ),
-      iconSize: iconSize,
-      buttonHeight: buttonHeight,
-      buttonPadding: const EdgeInsets.only(left: 3, right: 3),
-      dropdownDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-      ),
       items: items
           .map((item) => DropdownMenuItem<String>(
                 value: item,
@@ -64,7 +54,25 @@ class CustomDropDownButton extends StatelessWidget {
       onChanged: onChanged,
       onSaved: onSave,
       validator: validator,
-      itemPadding: const EdgeInsets.symmetric(horizontal: 20),
+      iconStyleData: IconStyleData(
+        icon: const Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black45,
+        ),
+        iconSize: iconSize,
+      ),
+      buttonStyleData: ButtonStyleData(
+        height: buttonHeight,
+        padding: const EdgeInsets.only(left: 3, right: 3),
+      ),
+      dropdownStyleData: DropdownStyleData(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+      menuItemStyleData: const MenuItemStyleData(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+      ),
     );
   }
 }

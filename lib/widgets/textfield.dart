@@ -39,7 +39,6 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       obscureText: obscureText,
       autovalidateMode: autovalidateMode,
-
     );
   }
 }

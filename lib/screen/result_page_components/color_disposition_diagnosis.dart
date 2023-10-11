@@ -4,24 +4,7 @@ import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
 class ColorDispositionCheckResult {
-  static List<String> colorDiscomposeType = [
-    'T',
-    'B',
-    'R',
-    'M',
-    'V',
-    'G',
-    'BG',
-    'O',
-    'I',
-    'RO',
-    'Y',
-    'YG',
-    'P',
-    'Br',
-    'Wh',
-    'BI'
-  ];
+  static List<String> colorDiscomposeType = ['T', 'B', 'R', 'M', 'V', 'G', 'BG', 'O', 'I', 'RO', 'Y', 'YG', 'P', 'Br', 'Wh', 'BI'];
   static List<List<int>> indexWithTypes = [
     [1, 5, 9, 13, 17],
     [2, 6, 10, 14, 18],
@@ -84,7 +67,7 @@ class ColorDispositionCheckResult {
       child: Card(
         elevation: 5,
         child: ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: colorDispositionResult.length + 1,

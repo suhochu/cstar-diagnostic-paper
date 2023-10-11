@@ -84,19 +84,17 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
                     width: 10,
                   ),
                   Flexible(
-                    child:
-                      Text(
-                        widget.questions.question,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
+                    child: Text(
+                      widget.questions.question,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
                   )
                 ],
               ),
             ),
             _getRadioTile(Selections.A, widget.questions.answerA),
             _getRadioTile(Selections.B, widget.questions.answerB),
-            if (widget.questionQty >= 3 && widget.questions.answerC != '')
-              _getRadioTile(Selections.C, widget.questions.answerC!),
+            if (widget.questionQty >= 3 && widget.questions.answerC != '') _getRadioTile(Selections.C, widget.questions.answerC!),
             if (widget.questionQty >= 4) _getRadioTile(Selections.D, widget.questions.answerD!),
             if (widget.questionQty >= 5) _getRadioTile(Selections.E, widget.questions.answerE!),
             if (widget.questionQty >= 6) _getRadioTile(Selections.F, widget.questions.answerF!),

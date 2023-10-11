@@ -34,7 +34,7 @@ class QuestionListNotifier extends StateNotifier<QuestionDataModel> {
     }
   }
 
-  void reset(){
+  void reset() {
     state = QuestionModelsLoading();
   }
 }

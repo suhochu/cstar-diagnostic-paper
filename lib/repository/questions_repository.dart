@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gsheets/gsheets.dart';
 
 final questionsRepositoryProvider = Provider<QuestionsRepository>(
-      (ref) => QuestionsRepository(gSheets: ref.read(googleSheetRepository)),
+  (ref) => QuestionsRepository(gSheets: ref.read(googleSheetRepository)),
 );
 
 class QuestionsRepository {
@@ -25,7 +25,7 @@ class QuestionsRepository {
   }
 
   Future<List<Map<String, String>>?> getAllRows() async {
-    if(testsInfoSheet == null) return null;
+    if (testsInfoSheet == null) return null;
     final List<Map<String, String>>? rows = await testsInfoSheet!.values.map.allRows();
     if (rows == null) return null;
     return rows;

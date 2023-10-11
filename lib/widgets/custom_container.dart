@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomContainer extends StatelessWidget {
-  const CustomContainer({Key? key, required this.title, required this.number, required this.questionQty})
-      : super(key: key);
+  const CustomContainer({Key? key, required this.title, required this.number, required this.questionQty}) : super(key: key);
   final String title;
   final int number;
   final int questionQty;
@@ -17,7 +16,7 @@ class CustomContainer extends StatelessWidget {
         onTap: () {
           context.pushNamed(
             QuestionsSheetPage.routeName,
-            params: {'rid': title},
+            pathParameters: {'rid': title},
           );
         },
         child: Container(
