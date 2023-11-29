@@ -31,7 +31,7 @@ class CustomTextField extends StatelessWidget {
       autofocus: true,
       maxLength: maxLength,
       mouseCursor: SystemMouseCursors.click,
-      style: const TextStyle(fontSize: 20, color: Colors.redAccent),
+      style: const TextStyle(fontSize: 20, color: Colors.black),
       maxLines: 1,
       decoration: textFieldInputDecoration(label: label, hint: hint),
       keyboardType: keyboardType,

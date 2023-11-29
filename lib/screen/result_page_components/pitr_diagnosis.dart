@@ -1,3 +1,4 @@
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
@@ -11,24 +12,24 @@ class PITRCheckResult {
   static List<int> score = [0, 0, 0];
 
   static List<int> diagnosis(AnswerSheetModel answerSheet) {
-    List<String?> answers = answerSheet.answers;
+    List<Selections> answers = answerSheet.answers;
 
     score = [0, 0, 0];
 
     for (int i = 0; i < 16; i++) {
-      if (answers[i] == 'A') {
+      if (answers[i] == Selections.A) {
         score[0]++;
       }
     }
 
     for (int i = 0; i < 16; i++) {
-      if (answers[i + 16] == 'A') {
+      if (answers[i + 16] == Selections.ndf) {
         score[1]++;
       }
     }
 
     for (int i = 0; i < 13; i++) {
-      if (answers[i + 32] == 'A') {
+      if (answers[i + 32] == Selections.A) {
         score[1]--;
       }
     }

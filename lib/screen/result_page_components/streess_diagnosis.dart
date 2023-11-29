@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
@@ -9,18 +10,18 @@ class StressDiagnosisResult {
   static List<int> score = [0, 0, 0, 0];
 
   static List<StressDiagnosisResultModel> diagnosis(AnswerSheetModel answerSheet) {
-    final List<String?> answers = answerSheet.answers;
+    final List<Selections> answers = answerSheet.answers;
     final List<StressDiagnosisResultModel> resultType = [];
     score = [0, 0, 0, 0];
 
     for (var i in answers) {
-      if (i == 'A') {
+      if (i == Selections.A) {
         score[0] += 1;
-      } else if (i == 'B') {
+      } else if (i == Selections.B) {
         score[1] += 1;
-      } else if (i == 'C') {
+      } else if (i == Selections.C) {
         score[2] += 1;
-      } else if (i == 'D') {
+      } else if (i == Selections.D) {
         score[3] += 1;
       } else {
         print('nothing have!!');

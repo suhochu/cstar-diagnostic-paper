@@ -1,3 +1,4 @@
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/answer_sheet_model.dart';
@@ -7,14 +8,14 @@ class PersonalColorDiagnosisResult {
   static List<String> personalColorType = ['웜톤', '중성', '쿨톤'];
 
   static List<int> diagnosis(AnswerSheetModel answerSheet) {
-    List<String?> answers = answerSheet.answers;
+    List<Selections> answers = answerSheet.answers;
     List<int> localScore = [0, 0, 0];
     for (int i = 0; i < answers.length; i++) {
-      if (answers[i] == 'A') {
+      if (answers[i] == Selections.A) {
         localScore[0] += 1;
-      } else if (answers[i] == 'B') {
+      } else if (answers[i] == Selections.B) {
         localScore[1] += 1;
-      } else if (answers[i] == 'C') {
+      } else if (answers[i] == Selections.C) {
         localScore[2] += 1;
       } else {
         print('nothing have!!');

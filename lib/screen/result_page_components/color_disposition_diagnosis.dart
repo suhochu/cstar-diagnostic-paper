@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/data_contants.dart';
+
 class ColorDispositionCheckResult {
   static List<String> colorDiscomposeType = ['T', 'B', 'R', 'M', 'V', 'G', 'BG', 'O', 'I', 'RO', 'Y', 'YG', 'P', 'Br', 'Wh', 'BI'];
   static List<List<int>> indexWithTypes = [
@@ -27,13 +29,13 @@ class ColorDispositionCheckResult {
   static List<int> score = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   static List<int> diagnosis(AnswerSheetModel answerSheet) {
-    List<String?> answers = answerSheet.answers;
+    List<Selections> answers = answerSheet.answers;
 
     score = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     for (int j = 0; j < indexWithTypes.length; j++) {
       for (var i in indexWithTypes[j]) {
-        if (answers[i - 1] == 'A') {
+        if (answers[i - 1] == Selections.A) {
           score[j]++;
         }
       }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
@@ -11,25 +12,25 @@ class DispositionDiagnosisResult {
   static List<int> score2 = [0, 0];
 
   static DispositionResultModel diagnosis(AnswerSheetModel answerSheet) {
-    List<String?> answers = answerSheet.answers;
+    List<Selections> answers = answerSheet.answers;
     score1 = [0, 0, 0];
     score2 = [0, 0];
 
     for (int i = 0; i < 14; i++) {
-      if (answers[i] == 'A') {
+      if (answers[i] == Selections.A) {
         score1[0] += 1;
-      } else if (answers[i] == 'B') {
+      } else if (answers[i] == Selections.B) {
         score1[1] += 1;
-      } else if (answers[i] == 'C') {
+      } else if (answers[i] == Selections.C) {
         score1[2] += 1;
       } else {
         print('nothing have!!');
       }
     }
     for (int i = 0; i < 15; i++) {
-      if (answers[i + 14] == 'A') {
+      if (answers[i + 14] == Selections.A) {
         score2[0] += 1;
-      } else if (answers[i + 14] == 'B') {
+      } else if (answers[i + 14] == Selections.B) {
         score2[1] += 1;
       } else {
         print('nothing have!!');

@@ -1,5 +1,5 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
-import 'package:cstarimage_testpage/model/question_model.dart';
+import 'package:cstarimage_testpage/model/lecture_code.dart';
 import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,11 +9,13 @@ class PitrCard extends ConsumerStatefulWidget {
     Key? key,
     required this.questions,
     required this.index,
+    required this.test,
     this.questionQty = 6,
   }) : super(key: key);
-  final QuestionModel questions;
+  final String questions;
   final int index;
   final int questionQty;
+  final Test test;
 
   @override
   ConsumerState<PitrCard> createState() => _PitrCardState();
@@ -24,9 +26,9 @@ class _PitrCardState extends ConsumerState<PitrCard> {
   Selections? selectedValue;
 
   void _setValues(int index) {
-    final List<String?> answerSheet = ref.read(answerSheetProvider).answers;
-    final answer = answerSheet[index - 1];
-    if (answer == 'A') {
+    final List<Selections> answerSheet = ref.read(answerSheetProvider.notifier).returnSelectionsList(widget.test);
+    final answer = answerSheet[index];
+    if (answer == Selections.A) {
       isChecked = true;
     } else {
       isChecked = false;
@@ -36,12 +38,20 @@ class _PitrCardState extends ConsumerState<PitrCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        elevation: 5,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-        child: Padding(padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), child: questionTitleWidget(widget.index)),
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Card(
+            elevation: 5,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              child: questionTitleWidget(widget.index),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -51,24 +61,21 @@ class _PitrCardState extends ConsumerState<PitrCard> {
     return Row(
       children: [
         SizedBox(
-          width: 50,
+          width: 40,
           child: Text(
-            'Q${widget.index}.',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            'Q${widget.index + 1}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
-        const SizedBox(
-          width: 30,
-        ),
+        // const SizedBox(width: 5),
         CustomCheckBox(
-          text: widget.questions.question,
+          text: widget.questions,
           ref: ref,
-          index: widget.index - 1,
+          index: widget.index,
           initialValue: isChecked,
+          test: widget.test,
         ),
-        const SizedBox(
-          width: 30,
-        ),
+        const SizedBox(width: 10),
       ],
     );
   }
@@ -81,11 +88,13 @@ class CustomCheckBox extends StatelessWidget {
     required this.ref,
     required this.index,
     required this.initialValue,
+    required this.test,
   }) : super(key: key);
   final String text;
   final ValueNotifier<bool> _isChecked = ValueNotifier<bool>(false);
   final int index;
   final bool initialValue;
+  final Test test;
   final WidgetRef ref;
 
   void setValues(bool check) async {
@@ -93,9 +102,9 @@ class CustomCheckBox extends StatelessWidget {
     if (check) {
       value = Selections.A;
     } else {
-      value = Selections.B;
+      value = Selections.ndf;
     }
-    ref.read(answerSheetProvider.notifier).update(index, value);
+    ref.read(answerSheetProvider.notifier).update(index: index, selection: value, test: test);
   }
 
   @override
@@ -105,9 +114,10 @@ class CustomCheckBox extends StatelessWidget {
       valueListenable: _isChecked,
       builder: (BuildContext context, bool value, Widget? child) {
         return SizedBox(
-          width: 250,
+          width: 330,
           child: CheckboxListTile(
             value: value,
+            dense: true,
             selected: value,
             activeColor: Colors.redAccent,
             onChanged: (value) {
@@ -116,7 +126,7 @@ class CustomCheckBox extends StatelessWidget {
             },
             title: Text(
               text,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ),
         );

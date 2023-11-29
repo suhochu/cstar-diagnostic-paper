@@ -1,22 +1,25 @@
+import 'package:cstarimage_testpage/constants/data_contants.dart';
+import 'package:cstarimage_testpage/model/lecture_code.dart';
+
 class AnswerSheetModel {
-  String title;
-  List<String?> answers;
+  Test? test;
+  List<Selections> answers;
 
   AnswerSheetModel({
-    required this.title,
+    required this.test,
     required this.answers,
   });
 
   factory AnswerSheetModel.initial() {
-    return AnswerSheetModel(title: '', answers: []);
+    return AnswerSheetModel(test: null, answers: []);
   }
 
   AnswerSheetModel copyWith({
-    List<String?>? answers,
-    String? title,
+    List<Selections>? answers,
+    Test? test,
   }) {
     return AnswerSheetModel(
-      title: title ?? this.title,
+      test: test ?? this.test,
       answers: answers ?? this.answers,
     );
   }

@@ -1,8 +1,9 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
-import 'package:cstarimage_testpage/model/question_model.dart';
-import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
+import 'package:cstarimage_testpage/model/lecture_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../provider/answer_sheet_provider.dart';
 
 class ColorDispositionQuestionCard extends ConsumerStatefulWidget {
   const ColorDispositionQuestionCard({
@@ -11,7 +12,7 @@ class ColorDispositionQuestionCard extends ConsumerStatefulWidget {
     required this.index,
     this.questionQty = 6,
   }) : super(key: key);
-  final List<QuestionModel> questions;
+  final List<String> questions;
   final int index;
   final int questionQty;
 
@@ -24,11 +25,11 @@ class _QuestionCardState extends ConsumerState<ColorDispositionQuestionCard> {
   Selections? selectedValue;
 
   void _setValues(int index) {
-    final List<String?> answerSheet = ref.read(answerSheetProvider).answers;
+    final List<Selections> answerSheet = ref.read(answerSheetProvider.notifier).returnSelectionsList(Test.colorDisposition);
     if (answerSheet.isNotEmpty) {
       for (int i = 0; i < 4; i++) {
         final answer = answerSheet[index + 20 * i - 1];
-        if (answer == 'A') {
+        if (answer == Selections.A) {
           areChecked[i] = true;
         } else {
           areChecked[i] = false;
@@ -40,7 +41,7 @@ class _QuestionCardState extends ConsumerState<ColorDispositionQuestionCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Card(
         elevation: 5,
         color: Colors.white,
@@ -57,47 +58,43 @@ class _QuestionCardState extends ConsumerState<ColorDispositionQuestionCard> {
         SizedBox(
           width: 50,
           child: Text(
-            'Q${widget.index}.',
+            'Q${widget.index}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
-        const SizedBox(
-          width: 10,
-        ),
+        const SizedBox(width: 10),
         Column(
           children: [
             CustomCheckBox(
-              text: widget.questions[0].question,
+              text: widget.questions[0],
               ref: ref,
               index: widget.index - 1,
               initialValue: areChecked[0],
             ),
             const SizedBox(height: 10),
             CustomCheckBox(
-              text: widget.questions[1].question,
+              text: widget.questions[1],
               ref: ref,
               index: widget.index + 20 - 1,
               initialValue: areChecked[1],
             ),
             const SizedBox(height: 10),
             CustomCheckBox(
-              text: widget.questions[2].question,
+              text: widget.questions[2],
               ref: ref,
               index: widget.index + 40 - 1,
               initialValue: areChecked[2],
             ),
             const SizedBox(height: 10),
             CustomCheckBox(
-              text: widget.questions[3].question,
+              text: widget.questions[3],
               ref: ref,
               index: widget.index + 60 - 1,
               initialValue: areChecked[3],
             ),
           ],
         ),
-        const SizedBox(
-          width: 30,
-        ),
+        const SizedBox(width: 30),
       ],
     );
   }
@@ -118,13 +115,17 @@ class CustomCheckBox extends StatelessWidget {
   final WidgetRef ref;
 
   void setValues(bool check) async {
-    Selections value;
+    final Selections value;
     if (check) {
       value = Selections.A;
     } else {
-      value = Selections.B;
+      value = Selections.ndf;
     }
-    ref.read(answerSheetProvider.notifier).update(index, value);
+    ref.read(answerSheetProvider.notifier).update(
+          test: Test.colorDisposition,
+          index: index,
+          selection: value,
+        );
   }
 
   @override

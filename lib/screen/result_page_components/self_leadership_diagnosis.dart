@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
@@ -24,19 +25,19 @@ class SelfLeaderShipResult {
   ];
 
   static List<SelfLeaderShipResultModel> diagnosis(AnswerSheetModel answerSheet) {
-    List<String?> answers = answerSheet.answers;
+    List<Selections> answers = answerSheet.answers;
     List<int> answerNumber = [];
 
     for (var i in answers) {
-      if (i == 'A') {
+      if (i == Selections.A) {
         answerNumber.add(1);
-      } else if (i == 'B') {
+      } else if (i == Selections.B) {
         answerNumber.add(2);
-      } else if (i == 'C') {
+      } else if (i == Selections.C) {
         answerNumber.add(3);
-      } else if (i == 'D') {
+      } else if (i == Selections.D) {
         answerNumber.add(4);
-      } else if (i == 'E') {
+      } else if (i == Selections.E) {
         answerNumber.add(5);
       } else {
         print('nothing have!!');

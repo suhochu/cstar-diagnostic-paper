@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:flutter/material.dart';
 
@@ -15,12 +16,12 @@ class EicTypeResult {
   static List<int> score = [0, 0, 0];
 
   static List<EicDiagnosisResultModel> diagnosis(AnswerSheetModel answerSheet) {
-    List<String?> answers = answerSheet.answers;
+    List<Selections> answers = answerSheet.answers;
 
     score = [0, 0, 0];
     for (int j = 0; j < 3; j++) {
       for (var i in indexWithTypes[j]) {
-        if (answers[i - 1] == 'A') {
+        if (answers[i - 1] == Selections.A) {
           score[j] += 1;
         }
       }
