@@ -1,3 +1,4 @@
+import 'package:cstarimage_testpage/constants/questions.dart';
 import 'package:cstarimage_testpage/data/personal_color_self.dart';
 import 'package:cstarimage_testpage/data/pitr.dart';
 import 'package:cstarimage_testpage/data/self_esteem_questions.dart';
@@ -44,13 +45,26 @@ enum Test {
         return StressResponseQuestions();
     }
   }
+
+  int lengthOfQuestions() {
+    return switch (this) {
+      Test.colorDisposition => qColorDisposition.length,
+      Test.dispositionTest => qDispositionTest.length,
+      Test.eicImage => qEicImage.length,
+      Test.leadershipQuestions => qLeaderShipQuestions.length,
+      Test.personalColorSelfTest => qPersonalColorSelfTest.length,
+      Test.pitr => qPitr.length,
+      Test.selfEsteemQuestions => qSelfEsteemQuestions.length,
+      Test.stressResponseQuestions => qStressResponseQuestions.length,
+    };
+  }
 }
 
 class LectureCode {
   static String getLectureCode() {
-    final today = DateTime.now();
-    final int year = today.year;
-    final int monthDay = today.month * 100 + today.day;
+    // final today = DateTime.now();
+    // final int year = today.year;
+    // final int monthDay = today.month * 100 + today.day;
     return '20230725';
   }
 }

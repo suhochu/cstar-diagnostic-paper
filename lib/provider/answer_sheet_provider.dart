@@ -1,4 +1,5 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
+import 'package:cstarimage_testpage/constants/questions.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:cstarimage_testpage/model/lecture_code.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +18,10 @@ class AnswerListNotifier extends StateNotifier<AnswersModel> {
           AnswersModel.initial(),
         );
 
-  void addTest(Test test, int answerLength) {
+  void addTest(Test test) {
     final int index = state.allAnswers.indexWhere((element) => element.test == test);
     if (index != -1) state.allAnswers.removeAt(index);
+    final int answerLength = test.lengthOfQuestions();
     final List<Selections> selections = List.generate(answerLength, (index) => Selections.ndf);
     state.allAnswers.add(AnswerSheetModel(
       test: test,

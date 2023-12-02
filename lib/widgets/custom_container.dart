@@ -15,13 +15,16 @@ class CustomContainer extends ConsumerWidget {
   final int number;
   final QAndAData qAndAData;
 
+
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          ref.read(answerSheetProvider.notifier).addTest(qAndAData.test, qAndAData.questions.length);
+          ref.read(answerSheetProvider.notifier).addTest(qAndAData.test);
            context.pushNamed(NewQuestionSheet.routeName, extra: qAndAData.test);
         },
         child: Container(

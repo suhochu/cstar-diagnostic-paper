@@ -1,3 +1,5 @@
+import 'package:cstarimage_testpage/constants/answers.dart';
+import 'package:cstarimage_testpage/constants/questions.dart';
 import 'package:cstarimage_testpage/model/lecture_code.dart';
 import 'package:cstarimage_testpage/model/questions_answers_data.dart';
 import 'package:cstarimage_testpage/screen/question_sheet_page_components/guestion_card_color_disposition.dart';
@@ -19,7 +21,6 @@ class NewQuestionSheet extends ConsumerWidget {
     required this.test,
   });
 
-  // final QAndAData? qAndAData;
   final Test? test;
 
   @override
@@ -34,7 +35,7 @@ class NewQuestionSheet extends ConsumerWidget {
       case Test.colorDisposition:
         questionLength = 20;
       case _:
-        questionLength = qAndAData!.questions.length;
+        questionLength = test!.lengthOfQuestions();
     }
     return Scaffold(
       body: ListView.builder(
@@ -62,9 +63,9 @@ class NewQuestionSheet extends ConsumerWidget {
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
                   ),
                 ),
-                if (qAndAData!.subTitle != null) qAndAData!.subTitle!,
+                if (qAndAData.subTitle != null) qAndAData.subTitle!,
                 const SizedBox(height: 8),
-                if (qAndAData!.explanations != null) qAndAData!.explanations!,
+                if (qAndAData.explanations != null) qAndAData.explanations!,
               ],
             );
           }
@@ -77,7 +78,7 @@ class NewQuestionSheet extends ConsumerWidget {
                   final (SelectionType, bool, bool) result = (
                     qAndAData!.selectionType,
                     ref.read(answerSheetProvider.notifier).containNdf(qAndAData!.test),
-                    qAndAData!.validator(ref.read(answerSheetProvider.notifier).returnSelectionsList(qAndAData!.test)),
+                    qAndAData.validator(ref.read(answerSheetProvider.notifier).returnSelectionsList(qAndAData!.test)),
                   );
                   switch (result) {
                     case (SelectionType.checkBox, true, false):
@@ -133,37 +134,66 @@ class NewQuestionSheet extends ConsumerWidget {
               return Container(
                 alignment: Alignment.center,
                 child: PitrCard(
-                  questions: qAndAData!.questions[index - 1],
+                  questions: qPitr[index - 1],
                   index: index - 1,
-                  test: qAndAData!.test,
+                  test: Test.pitr,
                 ),
               );
             case Test.colorDisposition:
               return ColorDispositionQuestionCard(
                 questions: [
-                  qAndAData!.questions[index - 1],
-                  qAndAData!.questions[(index + 20) - 1],
-                  qAndAData!.questions[(index + 40) - 1],
-                  qAndAData!.questions[(index + 60) - 1],
+                  qColorDisposition[index - 1],
+                  qColorDisposition[(index + 20) - 1],
+                  qColorDisposition[(index + 40) - 1],
+                  qColorDisposition[(index + 60) - 1],
                 ],
                 index: index,
-                questionQty: qAndAData!.questions.length,
+                questionQty: qColorDisposition.length,
               );
             case Test.dispositionTest:
+              return QuestionCard(
+                question: qDispositionTest[index - 1],
+                index: index,
+                answers: aDispositionTest[index - 1],
+                test: Test.dispositionTest,
+              );
+
             case Test.personalColorSelfTest:
+              return QuestionCard(
+                question: qPersonalColorSelfTest[index - 1],
+                index: index,
+                answers: aPersonalColorSelfTest[index - 1],
+                test: Test.personalColorSelfTest,
+              );
+
             case Test.stressResponseQuestions:
               return QuestionCard(
-                question: qAndAData!.questions[index - 1],
+                question: qStressResponseQuestions[index - 1],
                 index: index,
-                answers: (qAndAData!.answers[index - 1]) as List<String>,
-                test: qAndAData!.test,
+                answers: aStressResponseQuestions[index - 1],
+                test: Test.stressResponseQuestions,
               );
-            case _:
+
+            case Test.eicImage:
               return QuestionCard(
-                question: qAndAData!.questions[index - 1],
+                question: qEicImage[index - 1],
                 index: index,
-                answers: (qAndAData!.answers) as List<String>,
-                test: qAndAData!.test,
+                answers: aEicImage,
+                test: Test.eicImage,
+              );
+            case Test.leadershipQuestions:
+              return QuestionCard(
+                question: qLeaderShipQuestions[index - 1],
+                index: index,
+                answers: aLeadershipQuestions,
+                test: Test.leadershipQuestions,
+              );
+            case Test.selfEsteemQuestions:
+              return QuestionCard(
+                question: qSelfEsteemQuestions[index - 1],
+                index: index,
+                answers: aSelfEsteemQuestions,
+                test: Test.selfEsteemQuestions,
               );
           }
         },
