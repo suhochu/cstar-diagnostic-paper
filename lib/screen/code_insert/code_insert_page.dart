@@ -72,6 +72,9 @@ class CodeInsertPage extends ConsumerWidget {
                       }
                     }),
               ),
+              const SizedBox(height: 30),
+              const Text('Released at 20231203', style: TextStyle(color: Colors.black12),),
+              const SizedBox(height: 10),
             ],
           ),
         ),
