@@ -77,8 +77,8 @@ class NewQuestionSheet extends ConsumerWidget {
                 onPressed: () {
                   final (SelectionType, bool, bool) result = (
                     qAndAData!.selectionType,
-                    ref.read(answerSheetProvider.notifier).containNdf(qAndAData!.test),
-                    qAndAData.validator(ref.read(answerSheetProvider.notifier).returnSelectionsList(qAndAData!.test)),
+                    ref.read(answerSheetProvider.notifier).containNdf(qAndAData.test),
+                    qAndAData.validator(ref.read(answerSheetProvider.notifier).returnSelectionsList(qAndAData.test)),
                   );
                   switch (result) {
                     case (SelectionType.checkBox, true, false):
@@ -111,7 +111,6 @@ class NewQuestionSheet extends ConsumerWidget {
                           ),
                         ),
                       );
-
                       break;
                     case (_, _, _):
                       context.goNamed(ResultPage.routeName);

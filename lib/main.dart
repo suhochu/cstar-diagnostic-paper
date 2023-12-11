@@ -23,6 +23,7 @@ class _MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
+        fontFamily: 'Pretendard'
       ),
       routerConfig: RouteConfig.goRouter,
     );

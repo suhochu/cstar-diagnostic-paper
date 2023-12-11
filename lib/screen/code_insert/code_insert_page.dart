@@ -13,7 +13,7 @@ import '../selections/diaganosis_selection_page.dart';
 class CodeInsertPage extends ConsumerWidget {
   static String get routeName => 'MainPage';
 
-  CodeInsertPage({Key? key}) : super(key: key);
+  CodeInsertPage({super.key});
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -73,7 +73,7 @@ class CodeInsertPage extends ConsumerWidget {
                     }),
               ),
               const SizedBox(height: 30),
-              const Text('Released at 20231203', style: TextStyle(color: Colors.black12),),
+              const Text('Released at 20231211', style: TextStyle(color: Colors.black12),),
               const SizedBox(height: 10),
             ],
           ),

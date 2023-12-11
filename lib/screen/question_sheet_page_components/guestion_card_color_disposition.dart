@@ -7,11 +7,11 @@ import '../../provider/answer_sheet_provider.dart';
 
 class ColorDispositionQuestionCard extends ConsumerStatefulWidget {
   const ColorDispositionQuestionCard({
-    Key? key,
+    super.key,
     required this.questions,
     required this.index,
     this.questionQty = 6,
-  }) : super(key: key);
+  });
   final List<String> questions;
   final int index;
   final int questionQty;

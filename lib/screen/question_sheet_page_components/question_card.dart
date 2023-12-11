@@ -7,12 +7,13 @@ import '../../model/lecture_code.dart';
 
 class QuestionCard extends ConsumerStatefulWidget {
   const QuestionCard({
-    Key? key,
+    super.key,
     required this.question,
     required this.index,
     required this.answers,
     required this.test,
-  }) : super(key: key);
+  });
+
   final String question;
   final int index;
   final List<String> answers;
@@ -65,9 +66,7 @@ class _QuestionCardState extends ConsumerState<QuestionCard> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       widget.question,

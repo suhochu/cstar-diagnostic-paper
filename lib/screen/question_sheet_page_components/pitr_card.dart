@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PitrCard extends ConsumerStatefulWidget {
   const PitrCard({
-    Key? key,
+    super.key,
     required this.questions,
     required this.index,
     required this.test,
     this.questionQty = 6,
-  }) : super(key: key);
+  });
   final String questions;
   final int index;
   final int questionQty;
