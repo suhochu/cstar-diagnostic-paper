@@ -1,5 +1,12 @@
 import 'package:cstarimage_testpage/constants/answers.dart';
 import 'package:cstarimage_testpage/constants/questions.dart';
+import 'package:cstarimage_testpage/data/disposition_test.dart';
+import 'package:cstarimage_testpage/data/eic_image.dart';
+import 'package:cstarimage_testpage/data/leadership_questions.dart';
+import 'package:cstarimage_testpage/data/personal_color_self.dart';
+import 'package:cstarimage_testpage/data/pitr.dart';
+import 'package:cstarimage_testpage/data/self_esteem_questions.dart';
+import 'package:cstarimage_testpage/data/stress_response_questions.dart';
 import 'package:cstarimage_testpage/model/lecture_code.dart';
 import 'package:cstarimage_testpage/model/questions_answers_data.dart';
 import 'package:cstarimage_testpage/screen/question_sheet_page_components/guestion_card_color_disposition.dart';
@@ -9,12 +16,13 @@ import 'package:cstarimage_testpage/screen/selections/diaganosis_selection_page.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 
+import '../../data/color_disposition.dart';
 import '../../provider/answer_sheet_provider.dart';
 import '../result_page.dart';
 
 class NewQuestionSheet extends ConsumerWidget {
-  static String get routeName => 'NewQuestionsSheet';
 
   const NewQuestionSheet({
     super.key,
@@ -23,13 +31,35 @@ class NewQuestionSheet extends ConsumerWidget {
 
   final Test? test;
 
+  QAndAData selectQAndData(Test test) {
+    switch (test) {
+      case Test.colorDisposition:
+        return ColorDisposition();
+      case Test.dispositionTest:
+        return DispositionTest();
+      case Test.eicImage:
+        return EicImage();
+      case Test.leadershipQuestions:
+        return LeadershipQuestions();
+      case Test.personalColorSelfTest:
+        return PersonalColorSelfTest();
+      case Test.pitr:
+        return Pitr();
+      case Test.selfEsteemQuestions:
+        return SelfEsteemQuestions();
+      case Test.stressResponseQuestions:
+        return StressResponseQuestions();
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (test == null) {
-      context.goNamed(DiagnosisSelectionPage.routeName);
+      // Navigator.of(context).pushNamed("/diagnosisSelectionPage");
+      context.goNamed('diagnosisSelectionPage');
       return Container();
     }
-    final qAndAData = test?.selectQAndData();
+    final qAndAData = selectQAndData(test!);
     final int questionLength;
     switch (test) {
       case Test.colorDisposition:
@@ -113,7 +143,8 @@ class NewQuestionSheet extends ConsumerWidget {
                       );
                       break;
                     case (_, _, _):
-                      context.goNamed(ResultPage.routeName);
+                      // Navigator.of(context).pushNamed("/ResultPage");
+                      context.goNamed('ResultPage');
                   }
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
@@ -128,12 +159,14 @@ class NewQuestionSheet extends ConsumerWidget {
             );
           }
 
-          switch (qAndAData!.test) {
+          final answer = Answers();
+          final questions = Questions();
+          switch (qAndAData.test) {
             case Test.pitr:
               return Container(
                 alignment: Alignment.center,
                 child: PitrCard(
-                  questions: qPitr[index - 1],
+                  questions: questions.qPitr[index - 1],
                   index: index - 1,
                   test: Test.pitr,
                 ),
@@ -141,57 +174,57 @@ class NewQuestionSheet extends ConsumerWidget {
             case Test.colorDisposition:
               return ColorDispositionQuestionCard(
                 questions: [
-                  qColorDisposition[index - 1],
-                  qColorDisposition[(index + 20) - 1],
-                  qColorDisposition[(index + 40) - 1],
-                  qColorDisposition[(index + 60) - 1],
+                  questions.qColorDisposition[index - 1],
+                  questions.qColorDisposition[(index + 20) - 1],
+                  questions.qColorDisposition[(index + 40) - 1],
+                  questions.qColorDisposition[(index + 60) - 1],
                 ],
                 index: index,
-                questionQty: qColorDisposition.length,
+                questionQty: questions.qColorDisposition.length,
               );
             case Test.dispositionTest:
               return QuestionCard(
-                question: qDispositionTest[index - 1],
+                question: questions.qDispositionTest[index - 1],
                 index: index,
-                answers: aDispositionTest[index - 1],
+                answers: answer.aDispositionTest[index - 1],
                 test: Test.dispositionTest,
               );
 
             case Test.personalColorSelfTest:
               return QuestionCard(
-                question: qPersonalColorSelfTest[index - 1],
+                question: questions.qPersonalColorSelfTest[index - 1],
                 index: index,
-                answers: aPersonalColorSelfTest[index - 1],
+                answers: answer.aPersonalColorSelfTest[index - 1],
                 test: Test.personalColorSelfTest,
               );
 
             case Test.stressResponseQuestions:
               return QuestionCard(
-                question: qStressResponseQuestions[index - 1],
+                question: questions.qStressResponseQuestions[index - 1],
                 index: index,
-                answers: aStressResponseQuestions[index - 1],
+                answers: answer.aStressResponseQuestions[index - 1],
                 test: Test.stressResponseQuestions,
               );
 
             case Test.eicImage:
               return QuestionCard(
-                question: qEicImage[index - 1],
+                question: questions.qEicImage[index - 1],
                 index: index,
-                answers: aEicImage,
+                answers: answer.aEicImage,
                 test: Test.eicImage,
               );
             case Test.leadershipQuestions:
               return QuestionCard(
-                question: qLeaderShipQuestions[index - 1],
+                question: questions.qLeaderShipQuestions[index - 1],
                 index: index,
-                answers: aLeadershipQuestions,
+                answers: answer.aLeadershipQuestions,
                 test: Test.leadershipQuestions,
               );
             case Test.selfEsteemQuestions:
               return QuestionCard(
-                question: qSelfEsteemQuestions[index - 1],
+                question: questions.qSelfEsteemQuestions[index - 1],
                 index: index,
-                answers: aSelfEsteemQuestions,
+                answers: answer.aSelfEsteemQuestions,
                 test: Test.selfEsteemQuestions,
               );
           }

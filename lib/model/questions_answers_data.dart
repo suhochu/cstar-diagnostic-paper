@@ -11,16 +11,6 @@ class QAndAData<U> {
   Widget? explanations;
   final SelectionType selectionType;
   final List<String> result = [];
-  // int length = 0;
-  // final bool hasIndividualAnswers = false;
-  // final Test test = Test.colorDisposition;
-  // final List<String> questions = [];
-  // final List<T> answers = [];
-  // final Widget? subTitle;
-  // final Widget? explanations;
-  // final SelectionType selectionType = SelectionType.radio;
-
-
 
   bool validator(U result) => true;
 

@@ -1,19 +1,17 @@
-import 'package:cstarimage_testpage/model/lecture_code.dart';
 import 'package:cstarimage_testpage/model/new_user_model.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
 import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 
 import '../../provider/new_user_provider.dart';
 import '../../widgets/buttons.dart';
-import '../selections/diaganosis_selection_page.dart';
 
 class CodeInsertPage extends ConsumerWidget {
-  static String get routeName => 'MainPage';
-
   CodeInsertPage({super.key});
+
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -53,7 +51,7 @@ class CodeInsertPage extends ConsumerWidget {
                     if (val == null || val == '') return '교육 코드를 입력하세요';
                     if (val.length <= 8) return '교육 코드의 길이가 짧습니다.';
                     final String code = val.substring(0, 8);
-                    if (code != LectureCode.getLectureCode()) return '교육 코드를 잘 못 입력 하셨습니다.';
+                    if (code != '20230725') return '교육 코드를 잘 못 입력 하셨습니다.';
                     return null;
                   },
                 ),
@@ -65,15 +63,20 @@ class CodeInsertPage extends ConsumerWidget {
                     function: () {
                       final valid = _formKey.currentState!.validate();
                       if (valid) {
-                        ref
-                            .read(newUserProvider.notifier)
-                            .updateModel(NewUserModel.fromUserInput(code: _codeController.text, name: _nameController.text));
-                        context.goNamed(DiagnosisSelectionPage.routeName);
+                        ref.read(newUserProvider.notifier).updateModel(NewUserModel(
+                              code: _codeController.text,
+                              name: _nameController.text,
+                            ));
+                        // Navigator.of(context).pushNamed("/diagnosisSelectionPage");
+                        context.goNamed('diagnosisSelectionPage');
                       }
                     }),
               ),
               const SizedBox(height: 30),
-              const Text('Released at 20231211', style: TextStyle(color: Colors.black12),),
+              const Text(
+                'Released at 20231211',
+                style: TextStyle(color: Colors.black12),
+              ),
               const SizedBox(height: 10),
             ],
           ),

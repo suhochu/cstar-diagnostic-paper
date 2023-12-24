@@ -9,19 +9,18 @@ import 'package:cstarimage_testpage/screen/result_page_components/pitr_diagnosis
 import 'package:cstarimage_testpage/screen/result_page_components/self_esteem_diagnosis.dart';
 import 'package:cstarimage_testpage/screen/result_page_components/self_leadership_diagnosis.dart';
 import 'package:cstarimage_testpage/screen/result_page_components/streess_diagnosis.dart';
-import 'package:cstarimage_testpage/screen/selections/diaganosis_selection_page.dart';
 import 'package:cstarimage_testpage/widgets/buttons.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+// import 'package:go_router/go_router.dart';
+
 import '../provider/answer_sheet_provider.dart';
 
 class ResultPage extends ConsumerWidget {
-  static String get routeName => 'ResultPage';
-
-  ResultPage({Key? key}) : super(key: key);
+  ResultPage({super.key});
 
   late final List<SelfLeaderShipResultModel> selfLeaderShipResult = [];
   late final List<StressDiagnosisResultModel> stressDiagnosisResult = [];
@@ -91,7 +90,8 @@ class ResultPage extends ConsumerWidget {
     final userName = ref.read(newUserProvider).name;
     return WillPopScope(
       onWillPop: () async {
-        context.goNamed(DiagnosisSelectionPage.routeName);
+        // Navigator.of(context).pushNamed("/diagnosisSelectionPage");
+        context.goNamed('diagnosisSelectionPage');
         return Future.value(false);
       },
       child: Scaffold(
@@ -162,10 +162,12 @@ class ResultPage extends ConsumerWidget {
                 ),
               const SizedBox(height: 36),
               CustomSizedBox(
-                child: CustomElevatedButton(
-                  text: '테스트지 선택 화면으로 이동',
-                  function: () => context.goNamed(DiagnosisSelectionPage.routeName),
-                ),
+                child:
+                    CustomElevatedButton(text: '테스트지 선택 화면으로 이동', function: () =>
+                        // Navigator.of(context).pushNamed("/diagnosisSelectionPage")
+
+                        context.goNamed('diagnosisSelectionPage'),
+                        ),
               ),
               const SizedBox(height: 36),
             ],

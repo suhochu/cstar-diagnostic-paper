@@ -1,5 +1,4 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
-import 'package:cstarimage_testpage/constants/questions.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
 import 'package:cstarimage_testpage/model/lecture_code.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,19 +46,6 @@ class AnswerListNotifier extends StateNotifier<AnswersModel> {
     return [];
   }
 
-// void initializeFromList(List<String>? data) {
-//   state = state.copyWith(answers: data);
-// }
-
-// void updateAllAnswersByValue(String value) {
-//   List<String>? answers = List.generate(state.answers.length, (index) => value);
-//   state = state.copyWith(answers: answers);
-// }
-
-// void reset() {
-//   state = AnswerSheetModel.initial();
-// }
-
   void update({required Test test, required int index, required Selections selection}) {
     final int testIndex = state.allAnswers.indexWhere((element) => element.test == test);
     if (index != -1) {
@@ -70,30 +56,5 @@ class AnswerListNotifier extends StateNotifier<AnswersModel> {
       tempList[testIndex] = tempAnswerSheetModel;
       state = state.copyWith(allAnswers: tempList);
     }
-    //
-    // String answer = 'A';
-    // List<String?> answerMap = state.answers;
-    //
-    // switch (selection) {
-    //   case Selections.A:
-    //     answer = 'A';
-    //     break;
-    //   case Selections.B:
-    //     answer = 'B';
-    //     break;
-    //   case Selections.C:
-    //     answer = 'C';
-    //     break;
-    //   case Selections.D:
-    //     answer = 'D';
-    //     break;
-    //   case Selections.E:
-    //     answer = 'E';
-    //     break;
-    //   case Selections.F:
-    //     answer = 'F';
-    // }
-    // answerMap[index] = answer;
-    // state = state.copyWith(answers: answerMap);
   }
 }

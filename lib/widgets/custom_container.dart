@@ -3,15 +3,14 @@ import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../screen/questions/new_question_sheet_page.dart';
+// import 'package:go_router/go_router.dart';
 
 class CustomContainer extends ConsumerWidget {
   const CustomContainer({
-    Key? key,
+    super.key,
     required this.qAndAData,
     required this.number,
-  }) : super(key: key);
+  });
   final int number;
   final QAndAData qAndAData;
 
@@ -25,7 +24,8 @@ class CustomContainer extends ConsumerWidget {
       child: GestureDetector(
         onTap: () {
           ref.read(answerSheetProvider.notifier).addTest(qAndAData.test);
-           context.pushNamed(NewQuestionSheet.routeName, extra: qAndAData.test);
+           context.pushNamed('NewQuestionsSheet', extra: qAndAData.test);
+          // Navigator.of(context).pushNamed('/NewQuestionsSheet', arguments: qAndAData.test);
         },
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 15),

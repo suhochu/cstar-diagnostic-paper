@@ -1,19 +1,23 @@
 import 'package:cstarimage_testpage/routes/routes.dart';
-import 'package:cstarimage_testpage/utils/logging.dart';
+import 'package:cstarimage_testpage/screen/result_page.dart' deferred as result;
+import 'package:cstarimage_testpage/screen/selections/diaganosis_selection_page.dart' deferred as selection;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'model/lecture_code.dart';
+import 'screen/code_insert/code_insert_page.dart';
+import 'screen/questions/new_question_sheet_page.dart' deferred as questions;
+
 void main() {
   runApp(
-    ProviderScope(
-      observers: [Logger()],
-      child: const _MyApp(),
+    const ProviderScope(
+      child: _MyApp(),
     ),
   );
 }
 
 class _MyApp extends StatelessWidget {
-  const _MyApp({Key? key}) : super(key: key);
+  const _MyApp();
 
   @override
   Widget build(BuildContext context) {

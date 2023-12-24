@@ -1,15 +1,3 @@
-import 'package:cstarimage_testpage/constants/questions.dart';
-import 'package:cstarimage_testpage/data/personal_color_self.dart';
-import 'package:cstarimage_testpage/data/pitr.dart';
-import 'package:cstarimage_testpage/data/self_esteem_questions.dart';
-import 'package:cstarimage_testpage/data/stress_response_questions.dart';
-import 'package:cstarimage_testpage/model/questions_answers_data.dart';
-
-import '../data/color_disposition.dart';
-import '../data/disposition_test.dart';
-import '../data/eic_image.dart';
-import '../data/leadership_questions.dart';
-
 enum Test {
   colorDisposition('c', 'Color Disposition Checklist'),
   dispositionTest('d', ' Disposition Test'),
@@ -25,37 +13,16 @@ enum Test {
   final String seedCode;
   final String name;
 
-  QAndAData selectQAndData() {
-    switch (this) {
-      case Test.colorDisposition:
-        return ColorDisposition();
-      case Test.dispositionTest:
-        return DispositionTest();
-      case Test.eicImage:
-        return EicImage();
-      case Test.leadershipQuestions:
-        return LeadershipQuestions();
-      case Test.personalColorSelfTest:
-        return PersonalColorSelfTest();
-      case Test.pitr:
-        return Pitr();
-      case Test.selfEsteemQuestions:
-        return SelfEsteemQuestions();
-      case Test.stressResponseQuestions:
-        return StressResponseQuestions();
-    }
-  }
-
   int lengthOfQuestions() {
     return switch (this) {
-      Test.colorDisposition => qColorDisposition.length,
-      Test.dispositionTest => qDispositionTest.length,
-      Test.eicImage => qEicImage.length,
-      Test.leadershipQuestions => qLeaderShipQuestions.length,
-      Test.personalColorSelfTest => qPersonalColorSelfTest.length,
-      Test.pitr => qPitr.length,
-      Test.selfEsteemQuestions => qSelfEsteemQuestions.length,
-      Test.stressResponseQuestions => qStressResponseQuestions.length,
+      Test.colorDisposition => 80,
+      Test.dispositionTest => 29,
+      Test.eicImage => 51,
+      Test.leadershipQuestions => 25,
+      Test.personalColorSelfTest => 9,
+      Test.pitr => 45,
+      Test.selfEsteemQuestions => 20,
+      Test.stressResponseQuestions => 18,
     };
   }
 }
