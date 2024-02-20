@@ -1,14 +1,14 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
+import 'package:cstarimage_testpage/utils/string_extension.dart';
 import 'package:flutter/material.dart';
-
-import '../../model/answer_sheet_model.dart';
 
 class PersonalColorDiagnosisResult {
   static List<int> score = [0, 0, 0];
   static List<String> personalColorType = ['웜톤', '중성', '쿨톤'];
 
-  static List<int> diagnosis(AnswerSheetModel answerSheet) {
-    List<Selections> answers = answerSheet.answers;
+  static List<int> diagnosis(List<String> results) {
+    final List<Selections> answers = results.map((e) => e.getSelectionFromString()).toList();
+    // List<Selections> answers = answerSheet.answers;
     List<int> localScore = [0, 0, 0];
     for (int i = 0; i < answers.length; i++) {
       if (answers[i] == Selections.A) {

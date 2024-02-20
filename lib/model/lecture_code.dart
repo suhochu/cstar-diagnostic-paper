@@ -26,12 +26,3 @@ enum Test {
     };
   }
 }
-
-class LectureCode {
-  static String getLectureCode() {
-    // final today = DateTime.now();
-    // final int year = today.year;
-    // final int monthDay = today.month * 100 + today.day;
-    return '20230725';
-  }
-}

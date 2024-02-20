@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.obscureText = false,
   });
+
   final TextEditingController controller;
   final String? label;
   final String? hint;
@@ -36,7 +37,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       onChanged: onChanged,
       obscureText: obscureText,
-      autovalidateMode:  AutovalidateMode.always,
+      autovalidateMode: AutovalidateMode.always,
     );
   }
 }

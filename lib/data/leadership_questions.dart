@@ -1,10 +1,9 @@
 import 'package:cstarimage_testpage/model/questions_answers_data.dart';
 import 'package:flutter/material.dart';
 
-import '../constants/data_contants.dart';
 import '../model/lecture_code.dart';
 
-class LeadershipQuestions extends QAndAData<List<Selections>> {
+class LeadershipQuestions extends QAndAData {
   LeadershipQuestions({
     super.test = Test.leadershipQuestions,
     super.subTitle = const Padding(

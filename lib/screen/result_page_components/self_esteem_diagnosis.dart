@@ -1,12 +1,13 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
-import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
+import 'package:cstarimage_testpage/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class SelfEsteemResult {
   static int score = 0;
 
-  static int diagnosis(AnswerSheetModel answerSheet) {
-    List<Selections> answers = answerSheet.answers;
+  static int diagnosis(List<String> results) {
+    final List<Selections> answers = results.map((e) => e.getSelectionFromString()).toList();
+    // List<Selections> answers = answerSheet.answers;
     score = 0;
 
     for (var i in answers) {

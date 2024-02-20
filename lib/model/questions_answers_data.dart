@@ -4,7 +4,7 @@ import 'lecture_code.dart';
 
 enum SelectionType { radio, checkBox }
 
-class QAndAData<U> {
+class QAndAData {
   final bool hasIndividualAnswers;
   final Test test;
   Widget? subTitle;
@@ -12,9 +12,9 @@ class QAndAData<U> {
   final SelectionType selectionType;
   final List<String> result = [];
 
-  bool validator(U result) => true;
+  bool validator(List<String> result) => true;
 
-  void initiatedResultList(){
+  void initiatedResultList() {
     result.clear();
     result.addAll(List.generate(test.lengthOfQuestions(), (index) => ''));
   }

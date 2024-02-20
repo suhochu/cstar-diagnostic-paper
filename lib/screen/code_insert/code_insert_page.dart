@@ -1,23 +1,32 @@
-import 'package:cstarimage_testpage/model/new_user_model.dart';
+import 'package:cstarimage_testpage/routes/qlevar_routes.dart';
+import 'package:cstarimage_testpage/utils/shared_preference.dart';
 import 'package:cstarimage_testpage/widgets/sizedbox.dart';
 import 'package:cstarimage_testpage/widgets/textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:qlevar_router/qlevar_router.dart';
+
 // import 'package:go_router/go_router.dart';
 
-import '../../provider/new_user_provider.dart';
 import '../../widgets/buttons.dart';
 
-class CodeInsertPage extends ConsumerWidget {
+class CodeInsertPage extends StatelessWidget {
   CodeInsertPage({super.key});
 
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  void saveData() async {
+    await SharedPreferenceUtil.init();
+    await SharedPreferenceUtil.saveString(key: 'name', data: _nameController.text);
+    await SharedPreferenceUtil.saveString(key: 'code', data: _codeController.text);
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.setString('name', _nameController.text);
+    // await prefs.setString('code', _codeController.text);
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
@@ -49,9 +58,16 @@ class CodeInsertPage extends ConsumerWidget {
                   obscureText: false,
                   validator: (val) {
                     if (val == null || val == '') return '교육 코드를 입력하세요';
-                    if (val.length <= 8) return '교육 코드의 길이가 짧습니다.';
-                    final String code = val.substring(0, 8);
-                    if (code != '20230725') return '교육 코드를 잘 못 입력 하셨습니다.';
+                    if (!(val.contains('c') ||
+                        val.contains('d') ||
+                        val.contains('e') ||
+                        val.contains('l') ||
+                        val.contains('n') ||
+                        val.contains('p') ||
+                        val.contains('s') ||
+                        val.contains('r'))) return '올바른 코드를 입력하세요';
+                    // final String code = val.substring(0, 8);
+                    // if (code != '20230725') return '교육 코드를 잘 못 입력 하셨습니다.';
                     return null;
                   },
                 ),
@@ -60,21 +76,18 @@ class CodeInsertPage extends ConsumerWidget {
               CustomSizedBox(
                 child: CustomElevatedButton(
                     text: '제출하기',
-                    function: () {
+                    function: () async {
                       final valid = _formKey.currentState!.validate();
                       if (valid) {
-                        ref.read(newUserProvider.notifier).updateModel(NewUserModel(
-                              code: _codeController.text,
-                              name: _nameController.text,
-                            ));
-                        // Navigator.of(context).pushNamed("/diagnosisSelectionPage");
-                        context.goNamed('diagnosisSelectionPage');
+                        saveData();
+                        QR.toName(AppRoutes.testSelectionPage);
+                        // context.goNamed('diagnosisSelectionPage');
                       }
                     }),
               ),
               const SizedBox(height: 30),
               const Text(
-                'Released at 20231211',
+                'Released at 20240220',
                 style: TextStyle(color: Colors.black12),
               ),
               const SizedBox(height: 10),

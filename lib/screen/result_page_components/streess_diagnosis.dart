@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
+import 'package:cstarimage_testpage/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class StressDiagnosisResult {
@@ -9,8 +10,8 @@ class StressDiagnosisResult {
 
   static List<int> score = [0, 0, 0, 0];
 
-  static List<StressDiagnosisResultModel> diagnosis(AnswerSheetModel answerSheet) {
-    final List<Selections> answers = answerSheet.answers;
+  static List<StressDiagnosisResultModel> diagnosis(List<String> results) {
+    final List<Selections> answers = results.map((e) => e.getSelectionFromString()).toList();
     final List<StressDiagnosisResultModel> resultType = [];
     score = [0, 0, 0, 0];
 

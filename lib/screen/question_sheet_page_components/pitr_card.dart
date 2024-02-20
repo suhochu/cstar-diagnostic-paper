@@ -1,79 +1,79 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/lecture_code.dart';
-import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
+import 'package:cstarimage_testpage/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PitrCard extends ConsumerStatefulWidget {
-  const PitrCard({
+class PitrCard extends StatelessWidget {
+  PitrCard({
     super.key,
     required this.questions,
     required this.index,
     required this.test,
     this.questionQty = 6,
   });
+
   final String questions;
   final int index;
   final int questionQty;
   final Test test;
 
-  @override
-  ConsumerState<PitrCard> createState() => _PitrCardState();
-}
-
-class _PitrCardState extends ConsumerState<PitrCard> {
-  bool isChecked = false;
   Selections? selectedValue;
 
-  void _setValues(int index) {
-    final List<Selections> answerSheet = ref.read(answerSheetProvider.notifier).returnSelectionsList(widget.test);
-    final answer = answerSheet[index];
-    if (answer == Selections.A) {
-      isChecked = true;
+  Future<bool> _readValues(int index) async {
+    final List<String> answers = await SharedPreferenceUtil.getStringList(key: Test.pitr.name);
+
+    final answer = answers[index];
+    if (answer == Selections.A.toString()) {
+      return true;
     } else {
-      isChecked = false;
+      return false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Card(
-            elevation: 5,
-            color: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-              child: questionTitleWidget(widget.index),
-            ),
+    return FutureBuilder(
+      future: _readValues(index),
+      builder: (context, snapshot) {
+        return Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Card(
+                elevation: 5,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  child: questionTitleWidget(index, snapshot.hasData ? snapshot.data! : false),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget questionTitleWidget(int index) {
-    _setValues(index);
+  Widget questionTitleWidget(int index, bool initialValue) {
+    // _setValues(index);
     return Row(
       children: [
         SizedBox(
           width: 40,
           child: Text(
-            'Q${widget.index + 1}',
+            'Q${index + 1}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
         // const SizedBox(width: 5),
         CustomCheckBox(
-          text: widget.questions,
-          ref: ref,
-          index: widget.index,
-          initialValue: isChecked,
-          test: widget.test,
+          text: questions,
+          // ref: ref,
+          index: index,
+          initialValue: initialValue,
+          test: test,
         ),
         const SizedBox(width: 10),
       ],
@@ -83,19 +83,21 @@ class _PitrCardState extends ConsumerState<PitrCard> {
 
 class CustomCheckBox extends StatelessWidget {
   CustomCheckBox({
-    Key? key,
+    super.key,
     required this.text,
-    required this.ref,
+    // required this.ref,
     required this.index,
     required this.initialValue,
     required this.test,
-  }) : super(key: key);
+  });
+
   final String text;
   final ValueNotifier<bool> _isChecked = ValueNotifier<bool>(false);
   final int index;
   final bool initialValue;
   final Test test;
-  final WidgetRef ref;
+
+  // final WidgetRef ref;
 
   void setValues(bool check) async {
     Selections value;
@@ -104,7 +106,9 @@ class CustomCheckBox extends StatelessWidget {
     } else {
       value = Selections.ndf;
     }
-    ref.read(answerSheetProvider.notifier).update(index: index, selection: value, test: test);
+    List<String> answers = await SharedPreferenceUtil.getStringList(key: Test.pitr.name);
+    answers[index] = value.toString();
+    await SharedPreferenceUtil.saveStringList(key: Test.pitr.name, data: answers);
   }
 
   @override
@@ -120,7 +124,7 @@ class CustomCheckBox extends StatelessWidget {
             dense: true,
             selected: value,
             activeColor: Colors.redAccent,
-            onChanged: (value) {
+            onChanged: (value) async {
               setValues(value!);
               _isChecked.value = !_isChecked.value;
             },

@@ -1,5 +1,4 @@
 class Questions {
-
   final List<String> qColorDisposition = [
     '자유와 개성 ',
     '책임감 ',

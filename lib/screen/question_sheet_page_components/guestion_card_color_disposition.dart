@@ -1,40 +1,36 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/lecture_code.dart';
+import 'package:cstarimage_testpage/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../provider/answer_sheet_provider.dart';
-
-class ColorDispositionQuestionCard extends ConsumerStatefulWidget {
-  const ColorDispositionQuestionCard({
+class ColorDispositionQuestionCard extends StatelessWidget {
+  ColorDispositionQuestionCard({
     super.key,
     required this.questions,
     required this.index,
     this.questionQty = 6,
   });
+
   final List<String> questions;
   final int index;
   final int questionQty;
+  final List<bool> areChecked = [false, false, false, false];
 
-  @override
-  ConsumerState<ColorDispositionQuestionCard> createState() => _QuestionCardState();
-}
-
-class _QuestionCardState extends ConsumerState<ColorDispositionQuestionCard> {
-  List<bool> areChecked = [false, false, false, false];
-  Selections? selectedValue;
-
-  void _setValues(int index) {
-    final List<Selections> answerSheet = ref.read(answerSheetProvider.notifier).returnSelectionsList(Test.colorDisposition);
-    if (answerSheet.isNotEmpty) {
+  Future<bool> _setValues() async {
+    final List<String> answers = await SharedPreferenceUtil.getStringList(key: Test.colorDisposition.name);
+    if (answers.isEmpty) {
+      await SharedPreferenceUtil.saveStringList(key: Test.colorDisposition.name, data: List.generate(80, (index) => Selections.ndf.name));
+      return false;
+    } else {
       for (int i = 0; i < 4; i++) {
-        final answer = answerSheet[index + 20 * i - 1];
-        if (answer == Selections.A) {
+        final answer = answers[index + 20 * i - 1];
+        if (answer == Selections.A.name) {
           areChecked[i] = true;
         } else {
           areChecked[i] = false;
         }
       }
+      return true;
     }
   }
 
@@ -46,86 +42,88 @@ class _QuestionCardState extends ConsumerState<ColorDispositionQuestionCard> {
         elevation: 5,
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-        child: Padding(padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), child: questionTitleWidget(widget.index)),
+        child: Padding(padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), child: questionTitleWidget()),
       ),
     );
   }
 
-  Widget questionTitleWidget(int index) {
-    _setValues(index);
-    return Row(
-      children: [
-        SizedBox(
-          width: 50,
-          child: Text(
-            'Q${widget.index}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Column(
-          children: [
-            CustomCheckBox(
-              text: widget.questions[0],
-              ref: ref,
-              index: widget.index - 1,
-              initialValue: areChecked[0],
-            ),
-            const SizedBox(height: 10),
-            CustomCheckBox(
-              text: widget.questions[1],
-              ref: ref,
-              index: widget.index + 20 - 1,
-              initialValue: areChecked[1],
-            ),
-            const SizedBox(height: 10),
-            CustomCheckBox(
-              text: widget.questions[2],
-              ref: ref,
-              index: widget.index + 40 - 1,
-              initialValue: areChecked[2],
-            ),
-            const SizedBox(height: 10),
-            CustomCheckBox(
-              text: widget.questions[3],
-              ref: ref,
-              index: widget.index + 60 - 1,
-              initialValue: areChecked[3],
-            ),
-          ],
-        ),
-        const SizedBox(width: 30),
-      ],
+  Widget questionTitleWidget() {
+    return FutureBuilder(
+      future: _setValues(),
+      builder: (context, snapshot) {
+        if (snapshot.data == true) {
+          return Row(
+            children: [
+              SizedBox(
+                width: 50,
+                child: Text(
+                  'Q$index',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Column(
+                children: [
+                  CustomCheckBox(
+                    text: questions[0],
+                    // ref: ref,
+                    index: index - 1,
+                    initialValue: areChecked[0],
+                  ),
+                  const SizedBox(height: 10),
+                  CustomCheckBox(
+                    text: questions[1],
+                    // ref: ref,
+                    index: index + 20 - 1,
+                    initialValue: areChecked[1],
+                  ),
+                  const SizedBox(height: 10),
+                  CustomCheckBox(
+                    text: questions[2],
+                    // ref: ref,
+                    index: index + 40 - 1,
+                    initialValue: areChecked[2],
+                  ),
+                  const SizedBox(height: 10),
+                  CustomCheckBox(
+                    text: questions[3],
+                    // ref: ref,
+                    index: index + 60 - 1,
+                    initialValue: areChecked[3],
+                  ),
+                ],
+              ),
+              const SizedBox(width: 30),
+            ],
+          );
+        }
+        return Container();
+      },
     );
   }
 }
 
 class CustomCheckBox extends StatelessWidget {
   CustomCheckBox({
-    Key? key,
+    super.key,
     required this.text,
-    required this.ref,
     required this.index,
     required this.initialValue,
-  }) : super(key: key);
+  });
+
   final String text;
   final ValueNotifier<bool> _isChecked = ValueNotifier<bool>(false);
   final int index;
   final bool initialValue;
-  final WidgetRef ref;
 
-  void setValues(bool check) async {
-    final Selections value;
-    if (check) {
-      value = Selections.A;
+  Future<void> setValue({required bool result}) async {
+    List<String> answers = await SharedPreferenceUtil.getStringList(key: Test.colorDisposition.name);
+    if (result) {
+      answers[index] = Selections.A.name;
     } else {
-      value = Selections.ndf;
+      answers[index] = Selections.B.name;
     }
-    ref.read(answerSheetProvider.notifier).update(
-          test: Test.colorDisposition,
-          index: index,
-          selection: value,
-        );
+    await SharedPreferenceUtil.saveStringList(key: Test.colorDisposition.name, data: answers);
   }
 
   @override
@@ -142,8 +140,8 @@ class CustomCheckBox extends StatelessWidget {
             value: value,
             selected: value,
             activeColor: Colors.redAccent,
-            onChanged: (value) {
-              setValues(value!);
+            onChanged: (value) async {
+              await setValue(result: value!);
               _isChecked.value = !_isChecked.value;
             },
             title: Text(

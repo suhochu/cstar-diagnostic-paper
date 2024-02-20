@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomSizedBox extends StatelessWidget {
   const CustomSizedBox({super.key, required this.child});
+
   final Widget child;
 
   @override

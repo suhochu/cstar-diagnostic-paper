@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
+import 'package:cstarimage_testpage/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class SelfLeaderShipResult {
@@ -24,8 +25,9 @@ class SelfLeaderShipResult {
     [6, 10, 15, 18, 22],
   ];
 
-  static List<SelfLeaderShipResultModel> diagnosis(AnswerSheetModel answerSheet) {
-    List<Selections> answers = answerSheet.answers;
+  static List<SelfLeaderShipResultModel> diagnosis(List<String> results) {
+    // List<Selections> answers = answerSheet.answers;
+    final List<Selections> answers = results.map((e) => e.getSelectionFromString()).toList();
     List<int> answerNumber = [];
 
     for (var i in answers) {

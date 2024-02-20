@@ -1,11 +1,11 @@
 import 'package:cstarimage_testpage/constants/data_contants.dart';
-import 'package:cstarimage_testpage/provider/answer_sheet_provider.dart';
+import 'package:cstarimage_testpage/utils/shared_preference.dart';
+import 'package:cstarimage_testpage/utils/string_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/lecture_code.dart';
 
-class QuestionCard extends ConsumerStatefulWidget {
+class QuestionCard extends StatefulWidget {
   const QuestionCard({
     super.key,
     required this.question,
@@ -20,27 +20,40 @@ class QuestionCard extends ConsumerStatefulWidget {
   final Test test;
 
   @override
-  ConsumerState<QuestionCard> createState() => _QuestionCardState();
+  State<QuestionCard> createState() => _QuestionCardState();
 }
 
-class _QuestionCardState extends ConsumerState<QuestionCard> {
-  Selections? selectedValue;
+class _QuestionCardState extends State<QuestionCard> {
+  Future<Selections> setSelection() async {
+    List<String> answers = await SharedPreferenceUtil.getStringList(key: widget.test.name);
+    String selectedValue = answers[widget.index - 1];
+    return selectedValue.getSelectionFromString();
+  }
 
-  RadioListTile _getRadioTile(Selections selected, String content) {
-    selectedValue = ref.read(answerSheetProvider.notifier).returnSelectionsList(widget.test)[widget.index - 1];
-    return RadioListTile(
-      value: selected,
-      groupValue: selectedValue,
-      contentPadding: const EdgeInsets.only(left: 20),
-      activeColor: Colors.redAccent,
-      title: Text(
-        content,
-        style: const TextStyle(fontSize: 14),
-      ),
-      onChanged: (value) {
-        setState(() {
-          ref.read(answerSheetProvider.notifier).update(test: widget.test, index: widget.index - 1, selection: value);
-        });
+  FutureBuilder<Selections> _getRadioTile(Selections selected, String content) {
+    return FutureBuilder(
+      future: setSelection(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          return RadioListTile(
+            value: selected,
+            groupValue: snapshot.data!,
+            contentPadding: const EdgeInsets.only(left: 20),
+            activeColor: Colors.redAccent,
+            title: Text(
+              content,
+              style: const TextStyle(fontSize: 14),
+            ),
+            onChanged: (value) async {
+              final List<String> temp = await SharedPreferenceUtil.getStringList(key: widget.test.name);
+              final Selections selection = value ?? Selections.ndf;
+              temp[widget.index - 1] = selection.name;
+              await SharedPreferenceUtil.saveStringList(key: widget.test.name, data: temp);
+              setState(() {});
+            },
+          );
+        }
+        return Container();
       },
     );
   }

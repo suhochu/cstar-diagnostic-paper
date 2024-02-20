@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/data_contants.dart';
 
-class ColorDisposition extends QAndAData<List<Selections>> {
+class ColorDisposition extends QAndAData {
   ColorDisposition(
       {super.test = Test.colorDisposition,
       super.selectionType = SelectionType.checkBox,
@@ -24,10 +24,10 @@ class ColorDisposition extends QAndAData<List<Selections>> {
   }
 
   @override
-  bool validator(List<Selections> result) {
+  bool validator(List<String> result) {
     bool isValid = false;
     for (int i = 0; i < 20; i++) {
-      final List<Selections> toBeValidated = [
+      final List<String> toBeValidated = [
         result[i],
         result[i + 20],
         result[i + 40],
@@ -35,7 +35,7 @@ class ColorDisposition extends QAndAData<List<Selections>> {
       ];
       int count = 0;
       for (var i in toBeValidated) {
-        if (i == Selections.ndf) count++;
+        if (i == Selections.ndf.name) count++;
       }
       if (count > 2) break;
       if (i == 19) isValid = true;

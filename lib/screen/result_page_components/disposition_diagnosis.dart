@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cstarimage_testpage/constants/data_contants.dart';
 import 'package:cstarimage_testpage/model/answer_sheet_model.dart';
+import 'package:cstarimage_testpage/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class DispositionDiagnosisResult {
@@ -11,8 +12,9 @@ class DispositionDiagnosisResult {
   static List<int> score1 = [0, 0, 0];
   static List<int> score2 = [0, 0];
 
-  static DispositionResultModel diagnosis(AnswerSheetModel answerSheet) {
-    List<Selections> answers = answerSheet.answers;
+  static DispositionResultModel diagnosis(List<String> results) {
+    final List<Selections> answers = results.map((e) => e.getSelectionFromString()).toList();
+    // List<Selections> answers = answerSheet.answers;
     score1 = [0, 0, 0];
     score2 = [0, 0];
 

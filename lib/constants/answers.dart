@@ -1,10 +1,9 @@
 class Answers {
-
   final List<String> aColorDisposition = [
     '예',
     '아니요',
   ];
-   final List<List<String>> aDispositionTest = [
+  final List<List<String>> aDispositionTest = [
     [
       '친구들에게 연락해서 만난다 ',
       '혼자 여가(영화, 취미 등)생활을 즐긴다 ',
@@ -140,7 +139,7 @@ class Answers {
     '예 ',
     '아니요 ',
   ];
-   final List<String> aLeadershipQuestions = [
+  final List<String> aLeadershipQuestions = [
     '전혀 아니다 ',
     '대체로 아니다 ',
     '보통이다 ',
